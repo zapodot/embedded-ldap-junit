@@ -4,12 +4,12 @@ A [JUnit Rule](//github.com/junit-team/junit/wiki/Rules) for running an embedded
 
 ## Why?
 * you want to test your LDAP integration code without affecting your LDAP server
-* you are working with LDAP schema changes that you would like to test without changing the actual LDAP server
+* you are working with LDAP schema changes that you would like to test without changing the schema at the shared LDAP server
 * you are refactoring legacy code where LDAP calls is tightly coupled with your business logic and wants to start by testing the legacy code from the "outside" (as suggested by [Michael Feathers](http://www.informit.com/store/working-effectively-with-legacy-code-9780131177055?aid=15d186bd-1678-45e9-8ad3-fe53713e811b))
 
 ## Status
 This library is distributed through the [Sonatype OSS repo](https://oss.sonatype.org/) and should thus be widely available.
-Java 7 or higher is required.
+Java 7 or higher is required. It is currently at an early stage of development so breaking changes may occur :-)
 
 ## Changelog
 * version 0.1 (in progress): first release
