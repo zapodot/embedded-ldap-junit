@@ -18,6 +18,8 @@
         <junit.version>4.12</junit.version>
         <unboundid-ldapsdk.version>2.3.8</unboundid-ldapsdk.version>
         <slf4j.version>1.7.7</slf4j.version>
+        <maven-source-plugin.version>2.4</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>2.10.1</maven-javadoc-plugin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -47,6 +49,53 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <windowtitle>Embedded Database JUnit Rule API</windowtitle>
+                    <encoding>UTF-8</encoding>
+                    <links>
+                        <link>http://junit.org/javadoc/latest/</link>
+                    </links>
+                    <locale>en</locale>
+                    <keywords>true</keywords>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
