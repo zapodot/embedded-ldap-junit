@@ -24,10 +24,16 @@ public interface EmbeddedLdapRule extends TestRule {
     /**
      * For tests depending on the standard Java JNDI API
      *
-     * @return a shared InitialDirContext
-     * @throws NamingException if a context can not be established
+     * @return a shared InitialDirContext connected to the in-memory LDAP server
+     * @throws NamingException if a context can not be created
      */
     InitialDirContext initialDirContext() throws NamingException;
 
+    /**
+     * Like {@link #initialDirContext()}, but returns a Context
+     *
+     * @return a shared Context connected to the in-memory LDAP server
+     * @throws NamingException if context can not be created
+     */
     Context context() throws NamingException;
 }

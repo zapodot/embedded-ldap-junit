@@ -104,7 +104,7 @@ public class EmbeddedLdapRuleBuilder {
     /**
      * Creates a new rule based on the information that was previously provided
      *
-     * @return
+     * @return a new EmbeddedLdapRule instance
      */
     public EmbeddedLdapRule build() {
         Objects.requireNonNull(bindDSN, "\"bindDSN\" can not be null");

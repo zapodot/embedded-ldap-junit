@@ -82,7 +82,13 @@
                     <encoding>UTF-8</encoding>
                     <links>
                         <link>http://junit.org/javadoc/latest/</link>
+                        <link>http://docs.oracle.com/javase/7/docs/api/</link>
+                        <link>http://docs.ldap.com/ldap-sdk/docs/javadoc/</link>
                     </links>
+                    <header>
+                        <![CDATA[<b><a href="https://github.com/zapodot/embedded-ldap-junit">Embedded LDAP JUnit Rule</a>, v. ${project.version}</b>]]></header>
+                    <bottom>
+                        <![CDATA[Copyright &#169; {inceptionYear}&#x2013;{currentYear} <a href="http://zapodot.org">Sondre Eikanger Kval&oslash;</a>. All rights reserved..]]> </bottom>
                     <locale>en</locale>
                     <keywords>true</keywords>
                 </configuration>
