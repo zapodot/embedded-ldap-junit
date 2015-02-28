@@ -12,7 +12,7 @@ This library is distributed through the [Sonatype OSS repo](https://oss.sonatype
 Java 7 or higher is required.
 
 ## Changelog
-* version 0.1: first release
+* version 0.1 (in progress): first release
 
 ## Usage
 
