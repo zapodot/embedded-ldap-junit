@@ -85,6 +85,16 @@
                         <link>http://docs.oracle.com/javase/7/docs/api/</link>
                         <link>http://docs.ldap.com/ldap-sdk/docs/javadoc/</link>
                     </links>
+                    <groups>
+                        <group>
+                            <title>Public API</title>
+                            <packages>org.zapodot.junit.ldap</packages>
+                        </group>
+                        <group>
+                            <title>Internal API</title>
+                            <packages>org.zapodot.junit.ldap.internal*</packages>
+                        </group>
+                    </groups>
                     <header>
                         <![CDATA[<b><a href="https://github.com/zapodot/embedded-ldap-junit">Embedded LDAP JUnit Rule</a>, v. ${project.version}</b>]]></header>
                     <bottom>
