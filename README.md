@@ -1,4 +1,4 @@
-# embedded-ldap-junit [![Build Status](https://travis-ci.org/zapodot/jackson-databind-java-optional.svg?branch=master)](https://travis-ci.org/zapodot/jackson-databind-java-optional)
+# embedded-ldap-junit [![Build Status](https://travis-ci.org/zapodot/jackson-databind-java-optional.svg?branch=master)](https://travis-ci.org/zapodot/jackson-databind-java-optional) [![Coverage Status](https://coveralls.io/repos/zapodot/embedded-ldap-junit/badge.svg)](https://coveralls.io/r/zapodot/embedded-ldap-junit)
 
 A [JUnit Rule](//github.com/junit-team/junit/wiki/Rules) for running an embedded LDAP server in your JUnit test based on the wonderful [UnboundID LDAP SDK](https://www.ldap.com/unboundid-ldap-sdk-for-java).
 
