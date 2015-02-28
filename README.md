@@ -1,4 +1,5 @@
 # embedded-ldap-junit
+[![Build Status](https://travis-ci.org/zapodot/jackson-databind-java-optional.svg?branch=master)](https://travis-ci.org/zapodot/jackson-databind-java-optional)
 A JUnit rule for running an embedded LDAP server in your JUnit test based on the wonderful [UnboundID LDAP SDK](https://www.ldap.com/unboundid-ldap-sdk-for-java).
 
 ## Why?
