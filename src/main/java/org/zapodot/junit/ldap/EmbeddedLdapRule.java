@@ -4,6 +4,7 @@ import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPException;
 import org.junit.rules.TestRule;
 
+import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.InitialDirContext;
 
@@ -27,4 +28,6 @@ public interface EmbeddedLdapRule extends TestRule {
      * @throws NamingException if a context can not be established
      */
     InitialDirContext initialDirContext() throws NamingException;
+
+    Context context() throws NamingException;
 }

@@ -80,6 +80,11 @@ public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
         return createOrGetInitialDirContext();
     }
 
+    @Override
+    public Context context() throws NamingException {
+        return initialDirContext();
+    }
+
     private InitialDirContext createOrGetInitialDirContext() throws NamingException {
         if (isStarted) {
             if (initialDirContext == null) {
