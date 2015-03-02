@@ -20,7 +20,7 @@ public class EmbeddedLdapRuleBuilder {
     public static final String DEFAULT_BIND_DSN = "cn=Directory manager";
     public static final String DEFAULT_BIND_CREDENTIALS = "password";
     public static final String LDAP_SERVER_LISTENER_NAME = "test-listener";
-    private String domainDsn = DEFAULT_DOMAIN;
+    private List<String> domainDsn = new LinkedList<>();
 
     private String bindDSN = DEFAULT_BIND_DSN;
 
@@ -45,13 +45,13 @@ public class EmbeddedLdapRuleBuilder {
     }
 
     /**
-     * Sets the domainDsn to be used. If not set, it will default to the value of the {@link #DEFAULT_DOMAIN DEFAULT_DOMAIN} field
+     * Sets a domainDsn to be used. May be multiple values. If not set, it will default to the value of the {@link #DEFAULT_DOMAIN DEFAULT_DOMAIN} field
      *
      * @param domainDsn a valid DSN string
      * @return same EmbeddedLdapRuleBuilder instance with the domainDsn field set
      */
     public EmbeddedLdapRuleBuilder usingDomainDsn(final String domainDsn) {
-        this.domainDsn = domainDsn;
+        this.domainDsn.add(domainDsn);
         return this;
     }
 
@@ -113,10 +113,18 @@ public class EmbeddedLdapRuleBuilder {
                                                            ldifsToImport);
     }
 
+    private String[] domainDsnArray() {
+        if(domainDsn.size() == 0) {
+            return new String[]{DEFAULT_DOMAIN};
+        } else {
+            return domainDsn.toArray(new String[]{});
+        }
+    }
+
     private InMemoryDirectoryServerConfig createInMemoryServerConfiguration() {
         try {
             final InMemoryDirectoryServerConfig inMemoryDirectoryServerConfig =
-                    new InMemoryDirectoryServerConfig(domainDsn);
+                    new InMemoryDirectoryServerConfig(domainDsnArray());
 
             if (bindCredentials != null) {
                 this.authenticationConfiguration = new AuthenticationConfiguration(bindDSN, bindCredentials);
