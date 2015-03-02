@@ -6,22 +6,22 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.ClassLoadingStrategy;
 import net.bytebuddy.instrumentation.FieldAccessor;
 import net.bytebuddy.instrumentation.MethodDelegation;
-import net.bytebuddy.modifier.Visibility;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
-import static net.bytebuddy.matcher.ElementMatchers.any;
+import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
 
+/**
+ * Creates a new LDAPInterface proxy that hides potentially harmful methods from the LDAPConnection class.
+ *
+ * This class is part of the internal API and may thus be changed or removed without warning.
+ */
 public class LDAPInterfaceProxyFactory {
     private final static Class<? extends LDAPInterface> proxyType = new ByteBuddy().subclass(LDAPInterface.class)
-                                                                                .method(any())
-                                                                                .intercept(MethodDelegation.to(
-                                                                                        LDAPInterfaceInterceptor.class))
-                                                                                .defineField("ldapConnection",
-                                                                                             LDAPConnection.class,
-                                                                                             Visibility.PRIVATE)
+                                                                                .method(isDeclaredBy(LDAPInterface.class))
+                                                                                .intercept(MethodDelegation.toInstanceField(LDAPConnection.class, "ldapConnection"))
                                                                                 .implement(LDAPConnectionProxy.class)
                                                                                 .intercept(FieldAccessor.ofBeanProperty())
                                                                                 .make()
@@ -41,16 +41,15 @@ public class LDAPInterfaceProxyFactory {
     }
 
     private static LDAPInterface createConnectionProxy(final LDAPConnection ldapConnection) {
-        final LDAPConnectionProxy proxy = createProxyInstance();
-        proxy.setLdapConnection(ldapConnection);
-        return LDAPInterface.class.cast(proxy);
+        final LDAPInterface proxy = createProxyInstance();
+        ((LDAPConnectionProxy) proxy).setLdapConnection(ldapConnection);
+        return proxy;
     }
 
-    private static LDAPConnectionProxy createProxyInstance() {
+    private static LDAPInterface createProxyInstance() {
         final Constructor<? extends LDAPInterface> constructor = createConstructorForProxyClass();
         try {
-            final LDAPInterface connectionProxy = constructor.newInstance();
-            return LDAPConnectionProxy.class.cast(connectionProxy);
+            return constructor.newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalStateException(e);
         }

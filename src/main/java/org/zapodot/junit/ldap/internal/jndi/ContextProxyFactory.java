@@ -14,6 +14,11 @@ import java.lang.reflect.InvocationTargetException;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
+/**
+ * A factory that creates delegating proxys for the Context and DirContext interfaces that delegates to an underlying InitialDirContext
+ *
+ * This class is part of the internal API and may thus be changed or removed without warning
+ */
 public class ContextProxyFactory {
     private final static Class<? extends Context> CONTEXT_PROXY_TYPE =
             new ByteBuddy().subclass(Context.class)
@@ -30,6 +35,7 @@ public class ContextProxyFactory {
                                          .getClassLoader(),
                                  ClassLoadingStrategy.Default.WRAPPER)
                            .getLoaded();
+
     private final static Class<? extends DirContext> DIR_CONTEXT_PROXY_TYPE =
             new ByteBuddy().subclass(DirContext.class)
                            .name(new NamingStrategy.PrefixingRandom(

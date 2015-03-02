@@ -4,6 +4,11 @@ import javax.naming.Context;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * LDAP authentication POJO.
+ *
+ * This class is part of the internal API and may thus be changed or removed without warning.
+ */
 public class AuthenticationConfiguration {
     public final String userDn;
     public final String credentials;
