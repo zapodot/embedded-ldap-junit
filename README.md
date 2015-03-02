@@ -6,6 +6,7 @@ A [JUnit Rule](//github.com/junit-team/junit/wiki/Rules) for running an embedded
 * you want to test your LDAP integration code without affecting your LDAP server
 * you are working with LDAP schema changes that you would like to test without changing the schema at the shared LDAP server
 * you are refactoring legacy code where LDAP calls is tightly coupled with your business logic and wants to start by testing the legacy code from the "outside" (as suggested by [Michael Feathers](http://www.informit.com/store/working-effectively-with-legacy-code-9780131177055?aid=15d186bd-1678-45e9-8ad3-fe53713e811b))
+    * for this exact reason all instances returned from the EmbeddedLdapRule is instrumented to suppress "close" calls so that your legacy code will not destroy the current Context or LdapInterface
 
 ## Status
 This library is distributed through the [Sonatype OSS repo](https://oss.sonatype.org/) and should thus be widely available.
@@ -33,6 +34,11 @@ libraryDependencies += "org.zapodot" % "embedded-ldap-junit" % "0.1-SNAPSHOT"
 
 ### Add to Junit test
 ```java
+import com.unboundid.ldap.sdk.LDAPInterface;
+import javax.naming.Context;
+import javax.naming.NamingEnumeration;
+...
+
 @Rule
 public EmbeddedLdapRule embeddedLdapRule = EmbeddedLdapRuleBuilder
         .newInstance()
@@ -43,7 +49,7 @@ public EmbeddedLdapRule embeddedLdapRule = EmbeddedLdapRuleBuilder
 @Test
 public void testLdapConnection() throws Exception {
     // Test using the UnboundID LDAP SDK directly
-    final LDAPConnection ldapConnection = embeddedLdapRule.ldapConnection();
+    final LdapInterface ldapConnection = embeddedLdapRule.ldapConnection();
     final SearchResult searchResult = ldapConnection.search(DOMAIN_DSN, SearchScope.SUB, "(objectClass=person)");
     assertEquals(1, searchResult.getEntryCount());
 }
