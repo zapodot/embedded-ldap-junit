@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
-import javax.naming.directory.InitialDirContext;
+import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 
 import static org.junit.Assert.assertEquals;
@@ -33,12 +33,12 @@ public class EmbeddedLdapRuleTest {
     }
 
     @Test
-    public void testInitialDirContext() throws Exception {
-        final InitialDirContext initialDirContext = embeddedLdapRule.initialDirContext();
+    public void testDirContext() throws Exception {
+        final DirContext dirContext = embeddedLdapRule.dirContext();
         final SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         final NamingEnumeration<javax.naming.directory.SearchResult> resultNamingEnumeration =
-                initialDirContext.search(DOMAIN_DSN, "(objectClass=person)", searchControls);
+                dirContext.search(DOMAIN_DSN, "(objectClass=person)", searchControls);
         assertEquals(1, Iterators.size(Iterators.forEnumeration(resultNamingEnumeration)));
     }
 
@@ -47,5 +47,13 @@ public class EmbeddedLdapRuleTest {
         final Context context = embeddedLdapRule.context();
         final Object user = context.lookup("cn=Sondre Eikanger Kvalo,ou=people,dc=zapodot,dc=org");
         assertNotNull(user);
+    }
+
+    @Test
+    public void testContextClose() throws Exception {
+        final Context context = embeddedLdapRule.context();
+        context.close();
+        assertNotNull(context.getNameInNamespace());
+
     }
 }

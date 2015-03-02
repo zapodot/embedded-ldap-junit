@@ -13,10 +13,12 @@ import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zapodot.junit.ldap.EmbeddedLdapRule;
+import org.zapodot.junit.ldap.internal.jndi.ContextProxyFactory;
 import org.zapodot.junit.ldap.internal.unboundid.LDAPInterfaceProxyFactory;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
+import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.ldap.LdapContext;
 import java.util.Hashtable;
@@ -78,13 +80,13 @@ public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
     }
 
     @Override
-    public InitialDirContext initialDirContext() throws NamingException {
-        return createOrGetInitialDirContext();
+    public Context context() throws NamingException {
+        return ContextProxyFactory.asDelegatingContext(createOrGetInitialDirContext());
     }
 
     @Override
-    public Context context() throws NamingException {
-        return initialDirContext();
+    public DirContext dirContext() throws NamingException {
+        return ContextProxyFactory.asDelegatingDirContext(createOrGetInitialDirContext());
     }
 
     private InitialDirContext createOrGetInitialDirContext() throws NamingException {

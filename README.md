@@ -49,15 +49,23 @@ public void testLdapConnection() throws Exception {
 }
 
 @Test
-public void testInitialDirContext() throws Exception {
+public void testDirContext() throws Exception {
 
     // Test using the good ol' JDNI-LDAP integration
-    final InitialDirContext initialDirContext = embeddedLdapRule.initialDirContext();
+    final DirContext dirContext = embeddedLdapRule.dirContext();
     final SearchControls searchControls = new SearchControls();
     searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
     final NamingEnumeration<javax.naming.directory.SearchResult> resultNamingEnumeration =
-            initialDirContext.search(DOMAIN_DSN, "(objectClass=person)", searchControls);
+            dirContext.search(DOMAIN_DSN, "(objectClass=person)", searchControls);
     assertEquals(1, Iterators.size(Iterators.forEnumeration(resultNamingEnumeration)));
+}
+@Test
+public void testContext() throws Exception {
+
+    // Another test using the good ol' JDNI-LDAP integration, this time with the Context interface
+    final Context context = embeddedLdapRule.context();
+    final Object user = context.lookup("cn=John Doe,ou=people,dc=example,dc=com");
+    assertNotNull(user);
 }
 ```
 
