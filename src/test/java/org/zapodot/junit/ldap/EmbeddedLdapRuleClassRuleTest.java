@@ -1,6 +1,6 @@
 package org.zapodot.junit.ldap;
 
-import com.unboundid.ldap.sdk.LDAPConnection;
+import com.unboundid.ldap.sdk.LDAPInterface;
 import com.unboundid.ldap.sdk.SearchScope;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -21,7 +21,7 @@ public class EmbeddedLdapRuleClassRuleTest {
 
     @Test
     public void testCheck() throws Exception {
-        final LDAPConnection ldapConnection = embeddedLdapRule.ldapConnection();
+        final LDAPInterface ldapConnection = embeddedLdapRule.ldapConnection();
         assertEquals(4, ldapConnection.search(DOMAIN_DSN, SearchScope.SUB, "(objectClass=*)").getEntryCount());
 
     }

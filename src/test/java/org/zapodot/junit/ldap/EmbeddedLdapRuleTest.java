@@ -1,7 +1,7 @@
 package org.zapodot.junit.ldap;
 
 import com.google.common.collect.Iterators;
-import com.unboundid.ldap.sdk.LDAPConnection;
+import com.unboundid.ldap.sdk.LDAPInterface;
 import com.unboundid.ldap.sdk.SearchResult;
 import com.unboundid.ldap.sdk.SearchScope;
 import org.junit.Rule;
@@ -27,7 +27,7 @@ public class EmbeddedLdapRuleTest {
 
     @Test
     public void testLdapConnection() throws Exception {
-        final LDAPConnection ldapConnection = embeddedLdapRule.ldapConnection();
+        final LDAPInterface ldapConnection = embeddedLdapRule.ldapConnection();
         final SearchResult searchResult = ldapConnection.search(DOMAIN_DSN, SearchScope.SUB, "(objectClass=person)");
         assertEquals(1, searchResult.getEntryCount());
     }

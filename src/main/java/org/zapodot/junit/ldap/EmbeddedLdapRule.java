@@ -1,7 +1,7 @@
 package org.zapodot.junit.ldap;
 
-import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPException;
+import com.unboundid.ldap.sdk.LDAPInterface;
 import org.junit.rules.TestRule;
 
 import javax.naming.Context;
@@ -19,7 +19,7 @@ public interface EmbeddedLdapRule extends TestRule {
      * @return a shared LDAPConnection
      * @throws LDAPException i a connection can not be opened
      */
-    LDAPConnection ldapConnection() throws LDAPException;
+    LDAPInterface ldapConnection() throws LDAPException;
 
     /**
      * For tests depending on the standard Java JNDI API

@@ -11,7 +11,7 @@
         <maven>3.2.0</maven>
     </prerequisites>
     <name>${project.artifactId}</name>
-    <description>Library that provides a JUnit rule for setting up an inmemory LDAP server by using the glorious Unboundid LDAP SDK</description>
+    <description>Library that provides a JUnit rule for setting up an in-memory LDAP server by using the glorious Unboundid LDAP SDK</description>
     <url>https://github.com/zapodot/embedded-ldap-junit</url>
     <inceptionYear>2015</inceptionYear>
     <properties>
@@ -20,6 +20,9 @@
         <slf4j.version>1.7.7</slf4j.version>
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
         <maven-javadoc-plugin.version>2.10.1</maven-javadoc-plugin.version>
+        <guava.version>18.0</guava.version>
+        <byte-buddy.version>0.5.2</byte-buddy.version>
+        <logback.version>1.1.2</logback.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
@@ -36,7 +39,12 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>18.0</version>
+            <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>${byte-buddy.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -46,7 +54,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.1.2</version>
+            <version>${logback.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

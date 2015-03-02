@@ -7,11 +7,13 @@ import com.unboundid.ldap.listener.InMemoryDirectoryServer;
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
 import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPException;
+import com.unboundid.ldap.sdk.LDAPInterface;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zapodot.junit.ldap.EmbeddedLdapRule;
+import org.zapodot.junit.ldap.internal.unboundid.LDAPInterfaceProxyFactory;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -59,8 +61,8 @@ public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
     }
 
     @Override
-    public LDAPConnection ldapConnection() throws LDAPException {
-        return createOrGetLdapConnection();
+    public LDAPInterface ldapConnection() throws LDAPException {
+        return LDAPInterfaceProxyFactory.createProxy(createOrGetLdapConnection());
     }
 
     private LDAPConnection createOrGetLdapConnection() throws LDAPException {
