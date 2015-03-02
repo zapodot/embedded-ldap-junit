@@ -6,14 +6,14 @@ A [JUnit Rule](//github.com/junit-team/junit/wiki/Rules) for running an embedded
 * you want to test your LDAP integration code without affecting your LDAP server
 * you are working with LDAP schema changes that you would like to test without changing the schema at the shared LDAP server
 * you are refactoring legacy code where LDAP calls is tightly coupled with your business logic and wants to start by testing the legacy code from the "outside" (as suggested by [Michael Feathers](http://www.informit.com/store/working-effectively-with-legacy-code-9780131177055?aid=15d186bd-1678-45e9-8ad3-fe53713e811b))
-    * for this exact reason all instances returned from the EmbeddedLdapRule is instrumented to suppress "close" calls so that your legacy code will not destroy the current Context or LdapInterface
+    * for this exact reason all instances returned from the EmbeddedLdapRule is instrumented to suppress "close" calls so that your legacy code will not destroy the current Context/DirContext or LdapInterface
 
 ## Status
 This library is distributed through the [Sonatype OSS repo](https://oss.sonatype.org/) and should thus be widely available.
 Java 7 or higher is required. It is currently at an early stage of development so breaking changes may occur :-)
 
 ## Changelog
-* version 0.1 (in progress): first release
+* version 0.1: support for both UnboundID LDAP SDK and traditional JNDI LDAP integrations
 
 ## Usage
 
