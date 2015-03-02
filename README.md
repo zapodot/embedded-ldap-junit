@@ -1,7 +1,7 @@
 # embedded-ldap-junit
 [![Build Status](https://travis-ci.org/zapodot/embedded-ldap-junit.svg?branch=master)](https://travis-ci.org/zapodot/embedded-ldap-junit) [![Coverage Status](https://coveralls.io/repos/zapodot/embedded-ldap-junit/badge.svg)](https://coveralls.io/r/zapodot/embedded-ldap-junit) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.zapodot/embedded-ldap-junit/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.zapodot/embedded-ldap-junit) [![Analytics](https://ga-beacon.appspot.com/UA-40926073-2/embedded-ldap-junit/README.md)](https://github.com/igrigorik/ga-beacon)
 
-A [JUnit Rule](//github.com/junit-team/junit/wiki/Rules) for running an embedded LDAP server in your JUnit test based on the wonderful [UnboundID LDAP SDK](https://www.ldap.com/unboundid-ldap-sdk-for-java).
+A [JUnit Rule](//github.com/junit-team/junit/wiki/Rules) for running an embedded LDAP server in your JUnit test based on the wonderful [UnboundID LDAP SDK](https://www.ldap.com/unboundid-ldap-sdk-for-java). Inspired by the [Embedded Database JUnit Rule](//github.com/zapodot/embedded-db-junit).
 
 ## Why?
 * you want to test your LDAP integration code without affecting your LDAP server
