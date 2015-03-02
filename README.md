@@ -1,4 +1,4 @@
-# embedded-ldap-junit [![Build Status](https://travis-ci.org/zapodot/embedded-ldap-junit.svg?branch=master)](https://travis-ci.org/zapodot/embedded-ldap-junit) [![Coverage Status](https://coveralls.io/repos/zapodot/embedded-ldap-junit/badge.svg)](https://coveralls.io/r/zapodot/embedded-ldap-junit)
+# embedded-ldap-junit [![Build Status](https://travis-ci.org/zapodot/embedded-ldap-junit.svg?branch=master)](https://travis-ci.org/zapodot/embedded-ldap-junit) [![Coverage Status](https://coveralls.io/repos/zapodot/embedded-ldap-junit/badge.svg)](https://coveralls.io/r/zapodot/embedded-ldap-junit) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.zapodot/embedded-ldap-junit/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.zapodot/embedded-ldap-junit)
 
 A [JUnit Rule](//github.com/junit-team/junit/wiki/Rules) for running an embedded LDAP server in your JUnit test based on the wonderful [UnboundID LDAP SDK](https://www.ldap.com/unboundid-ldap-sdk-for-java).
 
@@ -23,13 +23,13 @@ Java 7 or higher is required. It is currently at an early stage of development s
 <dependency>
     <groupId>org.zapodot</groupId>
     <artifactId>embedded-ldap-junit</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1</version>
 </dependency>
 ```
 
 #### SBT
 ```scala
-libraryDependencies += "org.zapodot" % "embedded-ldap-junit" % "0.1-SNAPSHOT"
+libraryDependencies += "org.zapodot" % "embedded-ldap-junit" % "0.1"
 ```
 
 ### Add to Junit test
