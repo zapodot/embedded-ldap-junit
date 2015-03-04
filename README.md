@@ -14,6 +14,9 @@ This library is distributed through the [Sonatype OSS repo](https://oss.sonatype
 Java 7 or higher is required. It is currently at an early stage of development so breaking changes may occur :-)
 
 ## Changelog
+* version 0.2 (TO BE RELEASED):
+    * support for defining schema definitions using the "withSchema(String...)" method on the EmbeddedLdapRuleBuilder
+    * added the possibility to define multiple root DSNs
 * version 0.1: support for both UnboundID LDAP SDK and traditional JNDI LDAP integrations
 
 ## Usage
@@ -43,7 +46,8 @@ import javax.naming.NamingEnumeration;
 @Rule
 public EmbeddedLdapRule embeddedLdapRule = EmbeddedLdapRuleBuilder
         .newInstance()
-        .usingDomainDsn(DOMAIN_DSN)
+
+        .usingDomainDsn("dc=example,dc=com")
         .importingLdifs("example.ldif")
         .build();
 
