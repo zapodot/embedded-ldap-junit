@@ -1,11 +1,20 @@
 package org.zapodot.junit.ldap;
 
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
+import com.google.common.io.Resources;
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
 import com.unboundid.ldap.listener.InMemoryListenerConfig;
 import com.unboundid.ldap.sdk.LDAPException;
+import com.unboundid.ldap.sdk.schema.Schema;
+import com.unboundid.ldif.LDIFException;
 import org.zapodot.junit.ldap.internal.AuthenticationConfiguration;
 import org.zapodot.junit.ldap.internal.EmbeddedLdapRuleImpl;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +36,8 @@ public class EmbeddedLdapRuleBuilder {
     private String bindCredentials = DEFAULT_BIND_CREDENTIALS;
 
     private List<String> ldifsToImport = new LinkedList<>();
+
+    private List<String> schemaLdifs = new LinkedList<>();
 
     private Integer port = null;
 
@@ -89,6 +100,17 @@ public class EmbeddedLdapRuleBuilder {
     }
 
     /**
+     * Define schemas to be used for the server. If not defined, UnboundID will set up a default schema.
+     *
+     * @param ldifSchemaFiles LDIF-files containing schema element definitions
+     * @return same EmbeddedLdapRuleBuilder with the given LDIF-files added to the internal schema file collection.
+     */
+    public EmbeddedLdapRuleBuilder withSchema(final String... ldifSchemaFiles) {
+        this.schemaLdifs.addAll(Arrays.asList(ldifSchemaFiles));
+        return this;
+    }
+
+    /**
      * Specify one or more LDIF resources to be imported on startup.
      *
      * @param ldifFiles LDIF-files to import
@@ -113,14 +135,6 @@ public class EmbeddedLdapRuleBuilder {
                                                            ldifsToImport);
     }
 
-    private String[] domainDsnArray() {
-        if(domainDsn.size() == 0) {
-            return new String[]{DEFAULT_DOMAIN};
-        } else {
-            return domainDsn.toArray(new String[]{});
-        }
-    }
-
     private InMemoryDirectoryServerConfig createInMemoryServerConfiguration() {
         try {
             final InMemoryDirectoryServerConfig inMemoryDirectoryServerConfig =
@@ -139,12 +153,59 @@ public class EmbeddedLdapRuleBuilder {
                 inMemoryDirectoryServerConfig.setListenerConfigs(InMemoryListenerConfig.createLDAPConfig(
                         LDAP_SERVER_LISTENER_NAME));
             }
+            for (Schema s : customSchema().asSet()) {
+                inMemoryDirectoryServerConfig.setSchema(s);
+            }
             return inMemoryDirectoryServerConfig;
         } catch (LDAPException e) {
             throw new IllegalStateException(
                     "Could not create configuration for the in-memory LDAP instance due to an exception",
                     e);
         }
+    }
+
+    private String[] domainDsnArray() {
+        if (domainDsn.size() == 0) {
+            return new String[]{DEFAULT_DOMAIN};
+        } else {
+            return domainDsn.toArray(new String[]{});
+        }
+    }
+
+    private Optional<Schema> customSchema() {
+        final List<File> schemaFiles = schemaFiles();
+        if (!schemaFiles.isEmpty()) {
+            try {
+                return Optional.fromNullable(Schema.getSchema(schemaFiles));
+            } catch (IOException | LDIFException e) {
+                throw new IllegalArgumentException(
+                        "Could not create custom LDAP schema due, probably caused by an incorrectly formatted schema",
+                        e);
+            }
+        } else {
+            return Optional.absent();
+        }
+    }
+
+    private List<File> schemaFiles() {
+        return Lists.newArrayList(Lists.transform(this.schemaLdifs, new Function<String, File>() {
+            @Override
+            public File apply(final String input) {
+                try {
+                    final File file = new File(Resources.getResource(input).toURI());
+                    if (!file.isFile()) {
+                        throw new IllegalArgumentException(String.format(
+                                "The resource named \"%s\" can not be found or is not a file",
+                                input));
+                    }
+                    return file;
+                } catch (URISyntaxException e) {
+                    throw new IllegalArgumentException(String.format(
+                            "The resource named \"%s\" is not a valid file reference",
+                            input), e);
+                }
+            }
+        }));
     }
 
 

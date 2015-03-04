@@ -41,4 +41,22 @@ public class EmbeddedLdapRuleBuilderTest {
         EmbeddedLdapRuleBuilder.newInstance().bindingToPort(Integer.MIN_VALUE).build();
 
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSchemaNotFound() throws Exception {
+        EmbeddedLdapRuleBuilder.newInstance().withSchema("non-existing-schema.ldif").build();
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSchemaIsNotAFile() throws Exception {
+        EmbeddedLdapRuleBuilder.newInstance().withSchema("folder").build();
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSchemaIsInvalid() throws Exception {
+        EmbeddedLdapRuleBuilder.newInstance().withSchema("invalid.ldif").build();
+
+    }
 }
