@@ -27,13 +27,13 @@ Java 7 or higher is required. It is currently at an early stage of development s
 <dependency>
     <groupId>org.zapodot</groupId>
     <artifactId>embedded-ldap-junit</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
 </dependency>
 ```
 
 #### SBT
 ```scala
-libraryDependencies += "org.zapodot" % "embedded-ldap-junit" % "0.1"
+libraryDependencies += "org.zapodot" % "embedded-ldap-junit" % "0.2"
 ```
 
 ### Add to Junit test
@@ -79,4 +79,3 @@ public void testContext() throws Exception {
     assertNotNull(user);
 }
 ```
-
