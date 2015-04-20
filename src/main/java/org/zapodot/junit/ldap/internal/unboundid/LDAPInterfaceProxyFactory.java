@@ -3,9 +3,9 @@ package org.zapodot.junit.ldap.internal.unboundid;
 import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPInterface;
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.dynamic.ClassLoadingStrategy;
-import net.bytebuddy.instrumentation.FieldAccessor;
-import net.bytebuddy.instrumentation.MethodDelegation;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.implementation.FieldAccessor;
+import net.bytebuddy.implementation.MethodDelegation;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -21,7 +21,9 @@ import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
 public class LDAPInterfaceProxyFactory {
     private final static Class<? extends LDAPInterface> proxyType = new ByteBuddy().subclass(LDAPInterface.class)
                                                                                 .method(isDeclaredBy(LDAPInterface.class))
-                                                                                .intercept(MethodDelegation.toInstanceField(LDAPConnection.class, "ldapConnection"))
+                                                                                .intercept(MethodDelegation.toInstanceField(
+                                                                                        LDAPConnection.class,
+                                                                                        "ldapConnection"))
                                                                                 .implement(LDAPConnectionProxy.class)
                                                                                 .intercept(FieldAccessor.ofBeanProperty())
                                                                                 .make()
