@@ -14,6 +14,7 @@ This library is distributed through the [Sonatype OSS repo](https://oss.sonatype
 Java 7 or higher is required. It is currently at an early stage of development so breaking changes may occur :-)
 
 ## Changelog
+* version 0.3: solves issue #1 - give access to the LDAPConnection object from the UnboundID LDAP SDK 
 * version 0.2:
     * support for defining schema definitions using the "withSchema(String...)" method on the EmbeddedLdapRuleBuilder
     * added the possibility to define multiple root DSNs
@@ -46,15 +47,22 @@ import javax.naming.NamingEnumeration;
 @Rule
 public EmbeddedLdapRule embeddedLdapRule = EmbeddedLdapRuleBuilder
         .newInstance()
-
         .usingDomainDsn("dc=example,dc=com")
         .importingLdifs("example.ldif")
         .build();
 
 @Test
-public void testLdapConnection() throws Exception {
+public void testLdapInteface() throws Exception {
     // Test using the UnboundID LDAP SDK directly
     final LdapInterface ldapConnection = embeddedLdapRule.ldapConnection();
+    final SearchResult searchResult = ldapConnection.search(DOMAIN_DSN, SearchScope.SUB, "(objectClass=person)");
+    assertEquals(1, searchResult.getEntryCount());
+}
+
+@Test
+public void testUnsharedLdapConnection() throws Exception {
+    // Test using the UnboundID LDAP SDK directly by using the UnboundID LDAPConnection type
+    final LDAPConnection ldapConnection = embeddedLdapRule.unsharedLdapConnection();
     final SearchResult searchResult = ldapConnection.search(DOMAIN_DSN, SearchScope.SUB, "(objectClass=person)");
     assertEquals(1, searchResult.getEntryCount());
 }

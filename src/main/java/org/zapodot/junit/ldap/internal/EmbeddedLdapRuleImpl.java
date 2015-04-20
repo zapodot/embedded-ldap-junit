@@ -67,9 +67,14 @@ public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
         return LDAPInterfaceProxyFactory.createProxy(createOrGetLdapConnection());
     }
 
+    @Override
+    public LDAPConnection unsharedLdapConnection() throws LDAPException {
+        return createOrGetLdapConnection();
+    }
+
     private LDAPConnection createOrGetLdapConnection() throws LDAPException {
         if (isStarted) {
-            if (ldapConnection == null) {
+            if (ldapConnection == null || ! ldapConnection.isConnected()) {
                 ldapConnection = inMemoryDirectoryServer.getConnection();
             }
             return ldapConnection;
@@ -140,7 +145,7 @@ public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
 
     private void takeDownEmbeddedLdapServer() {
         try {
-            if (ldapConnection != null) {
+            if (ldapConnection != null && ldapConnection.isConnected()) {
                 ldapConnection.close();
             }
             if (initialDirContext != null) {
