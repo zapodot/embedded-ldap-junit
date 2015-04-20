@@ -19,7 +19,7 @@ public interface EmbeddedLdapRule extends TestRule {
      * closed when the test(s) have been invoked
      *
      * @return a shared LDAPConnection
-     * @throws LDAPException i a connection can not be opened
+     * @throws LDAPException if a connection can not be opened
      */
     LDAPInterface ldapConnection() throws LDAPException;
 
@@ -28,7 +28,7 @@ public interface EmbeddedLdapRule extends TestRule {
      * rather than the interface. If your code does not close the connection for you it will be closed on teardown
      *
      * @return a LDAPConnection connected to the embedded LDAP server
-     * @throws LDAPException
+     * @throws LDAPException if an exception occurred while establishing the connection
      */
     LDAPConnection unsharedLdapConnection() throws LDAPException;
 
