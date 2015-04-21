@@ -50,10 +50,11 @@ public interface EmbeddedLdapRule extends TestRule {
 
     /**
      * Gives access to the listening port for the currently running embedded LDAP server.
-     * This will make it easier to use other integration
-     * <p/>
+     * This will make it easier to use other integration mechanisms
+     * <p>
      * Note: the embedded LDAP server is by default configured to listen only on the loopback address
      * (i.e <em>localhost/127.0.0.1</em>) unless another address has been provided to the builder when the rule was built
+     * </p>
      *
      * @return the port number that the embedded server is listening to
      * @see org.zapodot.junit.ldap.EmbeddedLdapRuleBuilder#bindingToAddress(String)

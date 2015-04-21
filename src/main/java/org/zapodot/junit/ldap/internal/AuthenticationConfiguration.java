@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * LDAP authentication POJO.
- * <p/>
+ *
  * This class is part of the internal API and may thus be changed or removed without warning.
  */
 public class AuthenticationConfiguration {
