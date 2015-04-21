@@ -6,7 +6,7 @@
 
     <groupId>org.zapodot</groupId>
     <artifactId>embedded-ldap-junit</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4</version>
     <prerequisites>
         <maven>3.2.0</maven>
     </prerequisites>
