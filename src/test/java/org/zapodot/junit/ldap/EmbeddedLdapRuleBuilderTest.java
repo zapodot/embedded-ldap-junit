@@ -36,7 +36,7 @@ public class EmbeddedLdapRuleBuilderTest {
 
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testIllegalPort() throws Exception {
         EmbeddedLdapRuleBuilder.newInstance().bindingToPort(Integer.MIN_VALUE).build();
 
@@ -59,4 +59,18 @@ public class EmbeddedLdapRuleBuilderTest {
         EmbeddedLdapRuleBuilder.newInstance().withSchema("invalid.ldif").build();
 
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidPort() throws Exception {
+        EmbeddedLdapRuleBuilder.newInstance().bindingToPort(Integer.MAX_VALUE);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidBindAddress() throws Exception {
+        EmbeddedLdapRuleBuilder.newInstance().bindingToAddress("åpsldfåpl");
+
+    }
+
+
 }

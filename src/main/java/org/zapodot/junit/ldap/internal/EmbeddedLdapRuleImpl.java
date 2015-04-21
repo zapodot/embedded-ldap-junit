@@ -119,7 +119,7 @@ public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
         final Hashtable<String, String> environment = new Hashtable<>();
         environment.put(LdapContext.CONTROL_FACTORIES, DefaultResponseControlFactory.class.getName());
         environment.put(Context.PROVIDER_URL, String.format("ldap://%s:%s",
-                                                            "localhost",
+                                                            inMemoryDirectoryServer.getListenAddress().getHostName(),
                                                             embeddedServerPort()));
         environment.put(Context.INITIAL_CONTEXT_FACTORY, LdapCtxFactory.class.getName());
         if (authenticationConfiguration != null) {

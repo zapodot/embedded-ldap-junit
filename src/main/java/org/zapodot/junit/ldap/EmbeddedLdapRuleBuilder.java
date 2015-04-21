@@ -14,7 +14,9 @@ import org.zapodot.junit.ldap.internal.EmbeddedLdapRuleImpl;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +31,8 @@ public class EmbeddedLdapRuleBuilder {
     public static final String DEFAULT_BIND_DSN = "cn=Directory manager";
     public static final String DEFAULT_BIND_CREDENTIALS = "password";
     public static final String LDAP_SERVER_LISTENER_NAME = "test-listener";
+    public static final int MIN_PORT_EXCLUSIVE = 0;
+    public static final int MAX_PORT_EXCLUSIVE = 65535;
     private List<String> domainDsn = new LinkedList<>();
 
     private String bindDSN = DEFAULT_BIND_DSN;
@@ -39,7 +43,9 @@ public class EmbeddedLdapRuleBuilder {
 
     private List<String> schemaLdifs = new LinkedList<>();
 
-    private Integer port = null;
+    private Integer bindPort = 0;
+
+    private InetAddress bindAddress = InetAddress.getLoopbackAddress();
 
     private AuthenticationConfiguration authenticationConfiguration;
 
@@ -93,9 +99,32 @@ public class EmbeddedLdapRuleBuilder {
      *
      * @param port a port number
      * @return same EmbeddedLdapRuleBuilder instance with the port field set
+     * @throws IllegalArgumentException if the provided value for port is not between @{link MIN_PORT_EXCLUSIVE}
+     *                                  and @{MAX_PORT_EXCLUSIVE} (exclusive)
      */
     public EmbeddedLdapRuleBuilder bindingToPort(final int port) {
-        this.port = Integer.valueOf(port);
+        if ((port < MIN_PORT_EXCLUSIVE) || (port > MAX_PORT_EXCLUSIVE)) {
+            throw new IllegalArgumentException(String.format("Value \"%s\" is not a valid port number", port));
+        }
+        this.bindPort = Integer.valueOf(port);
+        return this;
+    }
+
+    /**
+     * Allows the listening address for the embedded LDAP server to be set. If not set it will bind to <em>localhost/127.0.0.1</em>.
+     *
+     * @param address a valid hostname or textual representation of an IP address
+     * @return same EmbeddedLdapRuleBuilder instance with the bindAddress field set
+     * @throws IllegalArgumentException if the value provided for \"address\" is invalid
+     */
+    public EmbeddedLdapRuleBuilder bindingToAddress(final String address) {
+        Objects.requireNonNull(address);
+        try {
+            final InetAddress addressByName = InetAddress.getByName(address);
+            this.bindAddress = addressByName;
+        } catch (UnknownHostException e) {
+            throw new IllegalArgumentException(String.format("Unknown host address \"%s\"", address), e);
+        }
         return this;
     }
 
@@ -145,14 +174,12 @@ public class EmbeddedLdapRuleBuilder {
                 inMemoryDirectoryServerConfig.addAdditionalBindCredentials(bindDSN, bindCredentials);
             }
 
-            if (port != null) {
-                inMemoryDirectoryServerConfig.setListenerConfigs(InMemoryListenerConfig.createLDAPConfig(
-                        LDAP_SERVER_LISTENER_NAME,
-                        port));
-            } else {
-                inMemoryDirectoryServerConfig.setListenerConfigs(InMemoryListenerConfig.createLDAPConfig(
-                        LDAP_SERVER_LISTENER_NAME));
-            }
+            final InMemoryListenerConfig listenerConfig = InMemoryListenerConfig.createLDAPConfig(
+                    LDAP_SERVER_LISTENER_NAME,
+                    bindAddress,
+                    bindPort,
+                    null);
+            inMemoryDirectoryServerConfig.setListenerConfigs(listenerConfig);
             for (Schema s : customSchema().asSet()) {
                 inMemoryDirectoryServerConfig.setSchema(s);
             }
