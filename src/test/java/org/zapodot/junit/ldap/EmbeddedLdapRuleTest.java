@@ -9,11 +9,9 @@ import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
-
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class EmbeddedLdapRuleTest {
 
@@ -48,7 +46,9 @@ public class EmbeddedLdapRuleTest {
             ldapConnection.close();
         }
         ldapConnection = embeddedLdapRule.unsharedLdapConnection();
-        final SearchResultEntry entry = ldapConnection.searchForEntry(new SearchRequest(dn, SearchScope.BASE, "(objectClass=person)"));
+        final SearchResultEntry entry = ldapConnection.searchForEntry(new SearchRequest(dn,
+                                                                                        SearchScope.BASE,
+                                                                                        "(objectClass=person)"));
         assertNotNull(entry);
     }
 
@@ -74,6 +74,19 @@ public class EmbeddedLdapRuleTest {
         final Context context = embeddedLdapRule.context();
         context.close();
         assertNotNull(context.getNameInNamespace());
+
+    }
+
+    @Test
+    public void testEmbeddedServerPort() throws Exception {
+        assertTrue(embeddedLdapRule.embeddedServerPort() > 0);
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testNoPortAssignedYet() throws Exception {
+        final EmbeddedLdapRule embeddedLdapRule = new EmbeddedLdapRuleBuilder().build();
+        embeddedLdapRule.embeddedServerPort();
 
     }
 }

@@ -47,4 +47,17 @@ public interface EmbeddedLdapRule extends TestRule {
      * @throws NamingException if a LDAP failure happens during DirContext creation
      */
     DirContext dirContext() throws NamingException;
+
+    /**
+     * Gives access to the listening port for the currently running embedded LDAP server.
+     * This will make it easier to use other integration
+     *
+     * Note: the listening address is always <em>0.0.0.0</em> which means the server will listen to all available NIC-s.
+     * This may change in a future release (should ideally only be listening on the loopback device)
+     *
+     * @return the port number that the embedded server is listening to
+     */
+    int embeddedServerPort();
+
+
 }

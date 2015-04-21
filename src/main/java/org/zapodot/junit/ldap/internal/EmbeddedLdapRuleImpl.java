@@ -94,6 +94,15 @@ public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
         return ContextProxyFactory.asDelegatingDirContext(createOrGetInitialDirContext());
     }
 
+    @Override
+    public int embeddedServerPort() {
+        if(isStarted) {
+            return inMemoryDirectoryServer.getListenPort();
+        } else {
+            throw new IllegalStateException("The embedded server must be started prior to accessing the listening port");
+        }
+    }
+
     private InitialDirContext createOrGetInitialDirContext() throws NamingException {
         if (isStarted) {
             if (initialDirContext == null) {
@@ -111,7 +120,7 @@ public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
         environment.put(LdapContext.CONTROL_FACTORIES, DefaultResponseControlFactory.class.getName());
         environment.put(Context.PROVIDER_URL, String.format("ldap://%s:%s",
                                                             "localhost",
-                                                            inMemoryDirectoryServer.getListenPort()));
+                                                            embeddedServerPort()));
         environment.put(Context.INITIAL_CONTEXT_FACTORY, LdapCtxFactory.class.getName());
         if (authenticationConfiguration != null) {
             environment.putAll(authenticationConfiguration.toAuthenticationEnvironment());
