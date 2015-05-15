@@ -43,6 +43,8 @@ public class EmbeddedLdapRuleBuilder {
 
     private List<String> schemaLdifs = new LinkedList<>();
 
+    private boolean addDefaultSchema = true;
+
     private Integer bindPort = 0;
 
     private InetAddress bindAddress = InetAddress.getLoopbackAddress();
@@ -129,6 +131,16 @@ public class EmbeddedLdapRuleBuilder {
     }
 
     /**
+     * Avoid adding UnboundID's default schema that contains the most common LDAP elements defined through various RFC's.
+     *
+     * @return same EmbeddedLdapRuleBuilder instance with the withoutDefaultSchema field set to FALSE
+     */
+    public EmbeddedLdapRuleBuilder withoutDefaultSchema() {
+        this.addDefaultSchema = true;
+        return this;
+    }
+
+    /**
      * Define schemas to be used for the server. If not defined, UnboundID will set up a default schema.
      *
      * @param ldifSchemaFiles LDIF-files containing schema element definitions
@@ -201,16 +213,22 @@ public class EmbeddedLdapRuleBuilder {
 
     private Optional<Schema> customSchema() {
         final List<File> schemaFiles = schemaFiles();
-        if (!schemaFiles.isEmpty()) {
-            try {
-                return Optional.fromNullable(Schema.getSchema(schemaFiles));
-            } catch (IOException | LDIFException e) {
-                throw new IllegalArgumentException(
-                        "Could not create custom LDAP schema due, probably caused by an incorrectly formatted schema",
-                        e);
+
+        try {
+            final Schema initialSchema = (addDefaultSchema ? Schema.getDefaultStandardSchema() : null);
+            if (!schemaFiles.isEmpty()) {
+                final Schema customSchema = initialSchema == null
+                                            ? Schema.getSchema(schemaFiles)
+                                            : initialSchema.mergeSchemas(Schema.getSchema(schemaFiles));
+                return Optional.fromNullable(customSchema);
+            } else {
+                return Optional.absent();
             }
-        } else {
-            return Optional.absent();
+
+        } catch (IOException | LDIFException | LDAPException e) {
+            throw new IllegalArgumentException(
+                    "Could not create custom LDAP schema due, probably caused by an incorrectly formatted schema",
+                    e);
         }
     }
 

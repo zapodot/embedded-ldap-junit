@@ -9,7 +9,10 @@ import static org.junit.Assert.assertNotNull;
 public class EmbeddedLdapRuleCustomSchemaTest {
 
     @Rule
-    public EmbeddedLdapRule embeddedLdapRule = EmbeddedLdapRuleBuilder.newInstance().withSchema("standard-schema.ldif").build();
+    public EmbeddedLdapRule embeddedLdapRule = EmbeddedLdapRuleBuilder.newInstance()
+                                                                      .withoutDefaultSchema()
+                                                                      .withSchema("standard-schema.ldif")
+                                                                      .build();
 
     @Test
     public void testFindCustomAttribute() throws Exception {
