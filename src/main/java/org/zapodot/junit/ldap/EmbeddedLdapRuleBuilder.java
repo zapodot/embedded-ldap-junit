@@ -136,7 +136,7 @@ public class EmbeddedLdapRuleBuilder {
      * @return same EmbeddedLdapRuleBuilder instance with the withoutDefaultSchema field set to FALSE
      */
     public EmbeddedLdapRuleBuilder withoutDefaultSchema() {
-        this.addDefaultSchema = true;
+        this.addDefaultSchema = false;
         return this;
     }
 
