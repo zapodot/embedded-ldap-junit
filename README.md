@@ -15,6 +15,7 @@ This library is distributed through the [Sonatype OSS repo](https://oss.sonatype
 Java 7 or higher is required. It is currently at an early stage of development so breaking changes may occur :-)
 
 ## Changelog
+* version 0.5: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.5)
 * version 0.4: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.4)
 * version 0.3: solves [issue #1](issues/1) - give access to the LDAPConnection object from the UnboundID LDAP SDK 
 * version 0.2:
