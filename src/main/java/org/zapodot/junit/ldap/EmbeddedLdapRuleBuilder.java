@@ -219,7 +219,7 @@ public class EmbeddedLdapRuleBuilder {
             if (!schemaFiles.isEmpty()) {
                 final Schema customSchema = initialSchema == null
                                             ? Schema.getSchema(schemaFiles)
-                                            : initialSchema.mergeSchemas(Schema.getSchema(schemaFiles));
+                                            : Schema.mergeSchemas(initialSchema, Schema.getSchema(schemaFiles));
                 return Optional.fromNullable(customSchema);
             } else {
                 return Optional.absent();
