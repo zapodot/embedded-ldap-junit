@@ -23,6 +23,7 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.ldap.LdapContext;
 import java.util.Hashtable;
 import java.util.List;
+import java.net.URLDecoder;
 
 public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
 
@@ -56,7 +57,7 @@ public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
                 new InMemoryDirectoryServer(inMemoryDirectoryServerConfig);
         if (ldifs != null && !ldifs.isEmpty()) {
             for (final String ldif : ldifs) {
-                ldapServer.importFromLDIF(false, Resources.getResource(ldif).getPath());
+                ldapServer.importFromLDIF(false, URLDecoder.decode(Resources.getResource(ldif).getPath(), "UTF-8"));
             }
         }
         return ldapServer;
