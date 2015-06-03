@@ -1,5 +1,6 @@
 package org.zapodot.junit.ldap.internal;
 
+import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.sun.jndi.ldap.DefaultResponseControlFactory;
 import com.sun.jndi.ldap.LdapCtxFactory;
@@ -8,7 +9,6 @@ import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
 import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPException;
 import com.unboundid.ldap.sdk.LDAPInterface;
-
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
@@ -22,7 +22,6 @@ import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.ldap.LdapContext;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Hashtable;
@@ -55,15 +54,18 @@ public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
         }
     }
 
-    private static InMemoryDirectoryServer createServer(final InMemoryDirectoryServerConfig inMemoryDirectoryServerConfig, final List<String> ldifs) throws LDAPException {
+    private static InMemoryDirectoryServer createServer(final InMemoryDirectoryServerConfig inMemoryDirectoryServerConfig,
+                                                        final List<String> ldifs) throws LDAPException {
         final InMemoryDirectoryServer ldapServer =
                 new InMemoryDirectoryServer(inMemoryDirectoryServerConfig);
         if (ldifs != null && !ldifs.isEmpty()) {
             for (final String ldif : ldifs) {
                 try {
-                  ldapServer.importFromLDIF(false, URLDecoder.decode(Resources.getResource(ldif).getPath(), "UTF-8"));
+                    ldapServer.importFromLDIF(false, URLDecoder.decode(Resources.getResource(ldif).getPath(),
+                                                                       Charsets.UTF_8.name()));
                 } catch (UnsupportedEncodingException e) {
-                  throw new IllegalStateException("Can not URL decode path:" + Resources.getResource(ldif).getPath(), e);
+                    throw new IllegalStateException("Can not URL decode path:" + Resources.getResource(ldif).getPath(),
+                                                    e);
                 }
             }
         }
