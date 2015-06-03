@@ -15,7 +15,7 @@ This library is distributed through the [Sonatype OSS repo](https://oss.sonatype
 Java 7 or higher is required. It is currently at an early stage of development so breaking changes may occur :-)
 
 ## Changelog
-* version 0.5.1: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.5.2)
+* version 0.5.2: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.5.2)
 * version 0.5.1: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.5.1)
 * version 0.5: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.5)
 * version 0.4: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.4)

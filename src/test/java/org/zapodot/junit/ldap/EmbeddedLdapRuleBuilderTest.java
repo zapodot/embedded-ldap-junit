@@ -61,6 +61,12 @@ public class EmbeddedLdapRuleBuilderTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void testSchemaFileUnsupportedIsInvalid() throws Exception {
+        EmbeddedLdapRuleBuilder.newInstance().withSchema("\"#%¤&&%/¤##¤¤").build();
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void testInvalidPort() throws Exception {
         EmbeddedLdapRuleBuilder.newInstance().bindingToPort(Integer.MAX_VALUE);
 
