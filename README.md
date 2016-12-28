@@ -12,7 +12,7 @@ A [JUnit Rule](//github.com/junit-team/junit/wiki/Rules) for running an embedded
 
 ## Status
 This library is distributed through the [Sonatype OSS repo](https://oss.sonatype.org/) and should thus be widely available.
-Java 7 or higher is required. It is currently at an early stage of development so breaking changes may occur :-)
+Java 7 or higher is required. It has proven pretty useful for several users and should be considered safe for running tests for all kinds of LDAP integrating code.
 
 ## Changelog
 * version 0.5.2: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.5.2)
