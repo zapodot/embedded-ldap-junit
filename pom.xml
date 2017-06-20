@@ -28,18 +28,18 @@
     <properties>
         <junit.version>4.12</junit.version>
         <unboundid-ldapsdk.version>2.3.8</unboundid-ldapsdk.version>
-        <slf4j.version>1.7.12</slf4j.version>
-        <guava.version>18.0</guava.version>
-        <byte-buddy.version>0.6</byte-buddy.version>
-        <logback.version>1.1.3</logback.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <guava.version>22.0</guava.version>
+        <byte-buddy.version>1.4.33</byte-buddy.version>
+        <logback.version>1.2.3</logback.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven-source-plugin.version>2.4</maven-source-plugin.version>
-        <maven-javadoc-plugin.version>2.10.2</maven-javadoc-plugin.version>
+        <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
         <maven-cobertura-plugin.version>2.7</maven-cobertura-plugin.version>
-        <maven-coveralls-plugin.version>3.1.0</maven-coveralls-plugin.version>
-        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+        <maven-coveralls-plugin.version>4.3.0</maven-coveralls-plugin.version>
+        <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-        <maven-nexus-staging-plugin.version>1.6.5</maven-nexus-staging-plugin.version>
+        <maven-nexus-staging-plugin.version>1.6.8</maven-nexus-staging-plugin.version>
     </properties>
     <dependencies>
         <dependency>

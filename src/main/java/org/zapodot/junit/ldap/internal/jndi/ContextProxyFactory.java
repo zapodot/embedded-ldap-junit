@@ -21,8 +21,8 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  */
 public class ContextProxyFactory {
     private final static Class<? extends Context> CONTEXT_PROXY_TYPE =
-            new ByteBuddy().subclass(Context.class)
-                           .name(new NamingStrategy.PrefixingRandom("DelegatingContext"))
+            new ByteBuddy().with(new NamingStrategy.PrefixingRandom("DelegatingContext"))
+                           .subclass(Context.class)
                            .method(isDeclaredBy(Context.class).and(not(named("close"))).and(not(isNative())))
                            .intercept(MethodDelegation.toInstanceField(Context.class,
                                                                        "delegatedContext"))
@@ -37,9 +37,8 @@ public class ContextProxyFactory {
                            .getLoaded();
 
     private final static Class<? extends DirContext> DIR_CONTEXT_PROXY_TYPE =
-            new ByteBuddy().subclass(DirContext.class)
-                           .name(new NamingStrategy.PrefixingRandom(
-                                   "DelegatingDirContext"))
+            new ByteBuddy().with(new NamingStrategy.PrefixingRandom("DelegatingDirContext"))
+                           .subclass(DirContext.class)
                            .method(isDeclaredBy(
                                    DirContext.class))
                            .intercept(MethodDelegation
