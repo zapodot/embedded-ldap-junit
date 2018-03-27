@@ -2,9 +2,13 @@ package org.zapodot.junit.ldap.internal.jndi;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;
+import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.matcher.ElementMatchers;
 
 import javax.naming.Context;
 import javax.naming.directory.DirContext;
@@ -12,20 +16,35 @@ import javax.naming.directory.InitialDirContext;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import static net.bytebuddy.matcher.ElementMatchers.*;
+import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
+import static net.bytebuddy.matcher.ElementMatchers.named;
+import static net.bytebuddy.matcher.ElementMatchers.not;
 
 /**
  * A factory that creates delegating proxys for the Context and DirContext interfaces that delegates to an underlying InitialDirContext
- *
+ * <p>
  * This class is part of the internal API and may thus be changed or removed without warning
  */
 public class ContextProxyFactory {
-    private final static Class<? extends Context> CONTEXT_PROXY_TYPE =
+
+    private static final String DELEGATED_CONTEXT_FIELD_NAME = "delegatedContext";
+
+    private static final String DELEGATED_DIR_CONTEXT_FIELD_NAME = "delegatedDirContext";
+
+    private static final String DELEGATING_DIR_CONTEXT_PREFIX = "DelegatingDirContext";
+
+    private ContextProxyFactory() {
+    }
+
+    private static final Class<? extends Context> CONTEXT_PROXY_TYPE =
             new ByteBuddy().subclass(Context.class)
-                           .name(new NamingStrategy.PrefixingRandom("DelegatingContext"))
-                           .method(isDeclaredBy(Context.class).and(not(named("close"))).and(not(isNative())))
-                           .intercept(MethodDelegation.toInstanceField(Context.class,
-                                                                       "delegatedContext"))
+                           .name(new NamingStrategy.PrefixingRandom("DelegatingContext")
+                                         .subclass(new TypeDescription.Generic.OfNonGenericType.ForLoadedType(Context.class)))
+                           .method(ElementMatchers.<MethodDescription>isDeclaredBy(Context.class)
+                                           .and(not(ElementMatchers.<MethodDescription>named("close")))
+                                           .and(not(ElementMatchers.<MethodDescription>isNative())))
+                           .intercept(MethodDelegation.toField(DELEGATED_CONTEXT_FIELD_NAME))
+                           .defineField(DELEGATED_CONTEXT_FIELD_NAME, Context.class, Visibility.PRIVATE)
                            .method(isDeclaredBy(Context.class).and(named("close")))
                            .intercept(MethodDelegation.to(ContextInterceptor.class))
                            .implement(ContextProxy.class)
@@ -36,16 +55,16 @@ public class ContextProxyFactory {
                                  ClassLoadingStrategy.Default.WRAPPER)
                            .getLoaded();
 
-    private final static Class<? extends DirContext> DIR_CONTEXT_PROXY_TYPE =
+    private static final Class<? extends DirContext> DIR_CONTEXT_PROXY_TYPE =
             new ByteBuddy().subclass(DirContext.class)
                            .name(new NamingStrategy.PrefixingRandom(
-                                   "DelegatingDirContext"))
+                                   DELEGATING_DIR_CONTEXT_PREFIX)
+                                         .subclass(new TypeDescription.Generic.OfNonGenericType.ForLoadedType(DirContext.class)))
                            .method(isDeclaredBy(
                                    DirContext.class))
                            .intercept(MethodDelegation
-                                              .toInstanceField(
-                                                      DirContext.class,
-                                                      "delegatedDirContext"))
+                                              .toField(DELEGATED_DIR_CONTEXT_FIELD_NAME))
+                           .defineField(DELEGATED_DIR_CONTEXT_FIELD_NAME, DirContext.class, Visibility.PRIVATE)
                            .implement(DirContextProxy.class)
                            .intercept(FieldAccessor.ofBeanProperty())
                            .make()
