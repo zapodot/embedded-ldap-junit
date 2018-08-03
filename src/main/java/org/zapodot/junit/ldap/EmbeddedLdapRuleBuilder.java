@@ -192,9 +192,7 @@ public class EmbeddedLdapRuleBuilder {
                     bindPort,
                     null);
             inMemoryDirectoryServerConfig.setListenerConfigs(listenerConfig);
-            for (Schema s : customSchema().asSet()) {
-                inMemoryDirectoryServerConfig.setSchema(s);
-            }
+            inMemoryDirectoryServerConfig.setSchema(customSchema());
             return inMemoryDirectoryServerConfig;
         } catch (LDAPException e) {
             throw new IllegalStateException(
@@ -211,7 +209,7 @@ public class EmbeddedLdapRuleBuilder {
         }
     }
 
-    private Optional<Schema> customSchema() {
+    private Schema customSchema() {
         final List<File> schemaFiles = schemaFiles();
 
         try {
@@ -220,9 +218,9 @@ public class EmbeddedLdapRuleBuilder {
                 final Schema customSchema = initialSchema == null
                                             ? Schema.getSchema(schemaFiles)
                                             : Schema.mergeSchemas(initialSchema, Schema.getSchema(schemaFiles));
-                return Optional.fromNullable(customSchema);
+                return customSchema;
             } else {
-                return Optional.absent();
+                return null;
             }
 
         } catch (IOException | LDIFException | LDAPException e) {
