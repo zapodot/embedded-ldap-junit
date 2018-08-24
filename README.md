@@ -15,6 +15,7 @@ This library is distributed through the [Sonatype OSS repo](https://oss.sonatype
 Java 7 or higher is required. It has proven pretty useful for several users and should be considered safe for running tests for all kinds of LDAP integrating code.
 
 ## Changelog
+* version 0.7: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.7)
 * version 0.6: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.6)
 * version 0.5.2: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.5.2)
 * version 0.5.1: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.5.1)
