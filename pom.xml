@@ -212,5 +212,23 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>java11</id>
+            <activation>
+                <jdk>11</jdk>
+            </activation>
+            <properties>
+                <java.version>11</java.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>java8</id>
+            <activation>
+                <jdk>8</jdk>
+            </activation>
+            <properties>
+                <java.version>8</java.version>
+            </properties>
+        </profile>
     </profiles>
 </project>

@@ -2,8 +2,6 @@ package org.zapodot.junit.ldap.internal;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-import com.sun.jndi.ldap.DefaultResponseControlFactory;
-import com.sun.jndi.ldap.LdapCtxFactory;
 import com.unboundid.ldap.listener.InMemoryDirectoryServer;
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
 import com.unboundid.ldap.sdk.LDAPConnection;
@@ -28,6 +26,10 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
+
+    private static final String JAVA_RT_CONTROL_FACTORY = "com.sun.jndi.ldap.DefaultResponseControlFactory";
+
+    private static final String JAVA_RT_CONTEXT_FACTORY = "com.sun.jndi.ldap.LdapCtxFactory";
 
     private static Logger logger = LoggerFactory.getLogger(EmbeddedLdapRuleImpl.class);
     private final InMemoryDirectoryServer inMemoryDirectoryServer;
@@ -127,11 +129,11 @@ public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
 
     private Hashtable<String, String> createLdapEnvironment() {
         final Hashtable<String, String> environment = new Hashtable<>();
-        environment.put(LdapContext.CONTROL_FACTORIES, DefaultResponseControlFactory.class.getName());
+        environment.put(LdapContext.CONTROL_FACTORIES, JAVA_RT_CONTROL_FACTORY);
         environment.put(Context.PROVIDER_URL, String.format("ldap://%s:%s",
                                                             inMemoryDirectoryServer.getListenAddress().getHostName(),
                                                             embeddedServerPort()));
-        environment.put(Context.INITIAL_CONTEXT_FACTORY, LdapCtxFactory.class.getName());
+        environment.put(Context.INITIAL_CONTEXT_FACTORY, JAVA_RT_CONTEXT_FACTORY);
         if (authenticationConfiguration != null) {
             environment.putAll(authenticationConfiguration.toAuthenticationEnvironment());
         }
