@@ -28,7 +28,7 @@
     <properties>
         <junit.version>4.12</junit.version>
         <unboundid-ldapsdk.version>4.0.7</unboundid-ldapsdk.version>
-        <slf4j.version>1.7.25</slf4j.version>
+        <slf4j.version>1.7.26</slf4j.version>
         <guava.version>20.0</guava.version>
         <byte-buddy.version>1.8.17</byte-buddy.version>
         <logback.version>1.2.3</logback.version>
