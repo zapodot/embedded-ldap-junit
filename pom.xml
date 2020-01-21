@@ -30,7 +30,7 @@
         <unboundid-ldapsdk.version>4.0.11</unboundid-ldapsdk.version>
         <slf4j.version>1.7.26</slf4j.version>
         <guava.version>20.0</guava.version>
-        <byte-buddy.version>1.9.13</byte-buddy.version>
+        <byte-buddy.version>1.10.7</byte-buddy.version>
         <logback.version>1.2.3</logback.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
