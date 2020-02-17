@@ -22,6 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.net.ssl.SSLSocketFactory;
+
 /**
  * A builder providing a fluent way of defining EmbeddedLdapRule instances
  */
@@ -52,6 +54,9 @@ public class EmbeddedLdapRuleBuilder {
     private AuthenticationConfiguration authenticationConfiguration;
 
     private InMemoryListenerConfig listenerConfig = null;
+
+    private boolean useTls = false;
+    private SSLSocketFactory socketFactory = null;
 
     public EmbeddedLdapRuleBuilder() {
     }
@@ -171,6 +176,11 @@ public class EmbeddedLdapRuleBuilder {
         return this;
     }
 
+    public EmbeddedLdapRuleBuilder useTls(boolean useTls) {
+        this.useTls = useTls;
+        return this;
+    }
+
     /**
      * Creates a new rule based on the information that was previously provided
      *
@@ -180,7 +190,7 @@ public class EmbeddedLdapRuleBuilder {
         Objects.requireNonNull(bindDSN, "\"bindDSN\" can not be null");
         return EmbeddedLdapRuleImpl.createForConfiguration(createInMemoryServerConfiguration(),
                                                            authenticationConfiguration,
-                                                           ldifsToImport);
+                                                           ldifsToImport, useTls, socketFactory);
     }
 
     private InMemoryDirectoryServerConfig createInMemoryServerConfiguration() {
@@ -260,5 +270,8 @@ public class EmbeddedLdapRuleBuilder {
         }));
     }
 
-
+    public EmbeddedLdapRuleBuilder withSocketFactory(SSLSocketFactory socketFactory) {
+        this.socketFactory = socketFactory;
+        return this;
+    }
 }
