@@ -119,9 +119,8 @@
                     <windowtitle>Embedded LDAP JUnit Rule API</windowtitle>
                     <encoding>UTF-8</encoding>
                     <links>
-                        <link>http://junit.org/javadoc/latest/</link>
-                        <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                        <link>http://docs.ldap.com/ldap-sdk/docs/javadoc/</link>
+                        <link>https://junit.org/junit4/javadoc/latest/</link>
+                        <link>https://docs.ldap.com/ldap-sdk/docs/javadoc/</link>
                     </links>
                     <groups>
                         <group>
