@@ -15,6 +15,7 @@ This library is distributed through the [Sonatype OSS repo](https://oss.sonatype
 Java 8 or higher is required. It has proven pretty useful for several users and should be considered safe for running tests for all kinds of LDAP integrating code.
 
 ## Changelog
+* version 0.8.1: switched license to MIT (was Apache v2) [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.8.1)
 * version 0.8: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.8)
 * version 0.7: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.7)
 * version 0.6: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.6)
@@ -36,13 +37,13 @@ Java 8 or higher is required. It has proven pretty useful for several users and 
 <dependency>
     <groupId>org.zapodot</groupId>
     <artifactId>embedded-ldap-junit</artifactId>
-    <version>0.8</version>
+    <version>0.8.1</version>
 </dependency>
 ```
 
 #### SBT
 ```scala
-libraryDependencies += "org.zapodot" % "embedded-ldap-junit" % "0.8"
+libraryDependencies += "org.zapodot" % "embedded-ldap-junit" % "0.8.1"
 ```
 
 ### Add to Junit test
