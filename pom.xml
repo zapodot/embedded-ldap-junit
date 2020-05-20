@@ -7,9 +7,6 @@
     <groupId>org.zapodot</groupId>
     <artifactId>embedded-ldap-junit</artifactId>
     <version>0.9-SNAPSHOT</version>
-    <prerequisites>
-        <maven>3.2.0</maven>
-    </prerequisites>
     <name>${project.artifactId}</name>
     <description>Library that provides a JUnit rule for setting up an in-memory LDAP server by using the glorious Unboundid LDAP SDK</description>
     <url>https://github.com/zapodot/embedded-ldap-junit</url>
@@ -32,6 +29,7 @@
         <guava.version>29.0-jre</guava.version>
         <byte-buddy.version>1.10.10</byte-buddy.version>
         <logback.version>1.2.3</logback.version>
+        <bouncycastle.version>1.65</bouncycastle.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
@@ -40,8 +38,8 @@
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-nexus-staging-plugin.version>1.6.8</maven-nexus-staging-plugin.version>
-        <java.version>1.8</java.version>
-        <bouncycastle.version>1.65</bouncycastle.version>
+        <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
+        <java.version>8</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -90,6 +88,29 @@
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.2.0</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>1.8.0</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
