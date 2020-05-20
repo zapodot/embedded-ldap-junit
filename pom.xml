@@ -41,6 +41,7 @@
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-nexus-staging-plugin.version>1.6.8</maven-nexus-staging-plugin.version>
         <java.version>1.7</java.version>
+        <bouncycastle.version>1.64</bouncycastle.version>
     </properties>
     <dependencies>
         <dependency>
@@ -73,6 +74,18 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.bouncycastle</groupId>
+          <artifactId>bcprov-jdk15on</artifactId>
+          <version>${bouncycastle.version}</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.bouncycastle</groupId>
+          <artifactId>bcpkix-jdk15on</artifactId>
+          <version>${bouncycastle.version}</version>
+          <scope>test</scope>
         </dependency>
     </dependencies>
     <build>

@@ -51,6 +51,8 @@ public class EmbeddedLdapRuleBuilder {
 
     private AuthenticationConfiguration authenticationConfiguration;
 
+    private InMemoryListenerConfig listenerConfig = null;
+
     public EmbeddedLdapRuleBuilder() {
     }
 
@@ -164,6 +166,11 @@ public class EmbeddedLdapRuleBuilder {
         return this;
     }
 
+    public EmbeddedLdapRuleBuilder withListener(InMemoryListenerConfig listenerConfig) {
+        this.listenerConfig = listenerConfig;
+        return this;
+    }
+
     /**
      * Creates a new rule based on the information that was previously provided
      *
@@ -186,11 +193,13 @@ public class EmbeddedLdapRuleBuilder {
                 inMemoryDirectoryServerConfig.addAdditionalBindCredentials(bindDSN, bindCredentials);
             }
 
-            final InMemoryListenerConfig listenerConfig = InMemoryListenerConfig.createLDAPConfig(
+            if (listenerConfig == null) {
+                listenerConfig = InMemoryListenerConfig.createLDAPConfig(
                     LDAP_SERVER_LISTENER_NAME,
                     bindAddress,
                     bindPort,
                     null);
+            }
             inMemoryDirectoryServerConfig.setListenerConfigs(listenerConfig);
             inMemoryDirectoryServerConfig.setSchema(customSchema());
             return inMemoryDirectoryServerConfig;
