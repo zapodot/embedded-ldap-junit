@@ -29,7 +29,7 @@
         <guava.version>29.0-jre</guava.version>
         <byte-buddy.version>1.10.10</byte-buddy.version>
         <logback.version>1.2.3</logback.version>
-        <bouncycastle.version>1.65</bouncycastle.version>
+        <bouncycastle.version>1.69</bouncycastle.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
