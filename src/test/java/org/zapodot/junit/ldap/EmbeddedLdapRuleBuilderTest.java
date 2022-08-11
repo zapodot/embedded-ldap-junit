@@ -2,7 +2,6 @@ package org.zapodot.junit.ldap;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class EmbeddedLdapRuleBuilderTest {
@@ -34,6 +33,15 @@ public class EmbeddedLdapRuleBuilderTest {
     public void testNullLDIF() {
         assertNotNull(EmbeddedLdapRuleBuilder.newInstance().importingLdifs(null).build());
 
+    }
+
+    @Test
+    public void testMaxSizeLimit() {
+        final EmbeddedLdapRule embeddedLdapRule = EmbeddedLdapRuleBuilder.newInstance()
+                .importingLdifs(null)
+                .withMaxSizeLimit(256)
+                .build();
+        assertNotNull(embeddedLdapRule);
     }
 
     @Test(expected = IllegalStateException.class)

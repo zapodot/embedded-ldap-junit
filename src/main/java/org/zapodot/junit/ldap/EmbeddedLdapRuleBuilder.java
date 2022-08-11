@@ -1,7 +1,6 @@
 package org.zapodot.junit.ldap;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
@@ -12,6 +11,7 @@ import com.unboundid.ldif.LDIFException;
 import org.zapodot.junit.ldap.internal.AuthenticationConfiguration;
 import org.zapodot.junit.ldap.internal.EmbeddedLdapRuleImpl;
 
+import javax.net.ssl.SSLSocketFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -21,8 +21,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-
-import javax.net.ssl.SSLSocketFactory;
 
 /**
  * A builder providing a fluent way of defining EmbeddedLdapRule instances
@@ -57,6 +55,8 @@ public class EmbeddedLdapRuleBuilder {
 
     private boolean useTls = false;
     private SSLSocketFactory socketFactory = null;
+
+    private Integer maxSizeLimit = null;
 
     public EmbeddedLdapRuleBuilder() {
     }
@@ -137,6 +137,11 @@ public class EmbeddedLdapRuleBuilder {
         return this;
     }
 
+    public EmbeddedLdapRuleBuilder withMaxSizeLimit(final int maxSizeLimit) {
+        this.maxSizeLimit = Integer.valueOf(maxSizeLimit);
+        return this;
+    }
+
     /**
      * Avoid adding UnboundID's default schema that contains the most common LDAP elements defined through various RFC's.
      *
@@ -212,6 +217,9 @@ public class EmbeddedLdapRuleBuilder {
             }
             inMemoryDirectoryServerConfig.setListenerConfigs(listenerConfig);
             inMemoryDirectoryServerConfig.setSchema(customSchema());
+            if(maxSizeLimit != null) {
+                inMemoryDirectoryServerConfig.setMaxSizeLimit(maxSizeLimit);
+            }
             return inMemoryDirectoryServerConfig;
         } catch (LDAPException e) {
             throw new IllegalStateException(
