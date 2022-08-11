@@ -15,19 +15,7 @@ This library is distributed through the [Sonatype OSS repo](https://oss.sonatype
 Java 8 or higher is required. It has proven pretty useful for several users and should be considered safe for running tests for all kinds of LDAP integrating code.
 
 ## Changelog
-* version 0.8.1: switched license to [MIT](LICENSE) (was Apache v2) [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.8.1)
-* version 0.8: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.8)
-* version 0.7: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.7)
-* version 0.6: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.6)
-* version 0.5.2: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.5.2)
-* version 0.5.1: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.5.1)
-* version 0.5: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.5)
-* version 0.4: [changelog](//github.com/zapodot/embedded-ldap-junit/releases/tag/v.0.4)
-* version 0.3: solves [issue #1](issues/1) - give access to the LDAPConnection object from the UnboundID LDAP SDK 
-* version 0.2:
-    * support for defining schema definitions using the "withSchema(String...)" method on the EmbeddedLdapRuleBuilder
-    * added the possibility to define multiple root DSNs
-* version 0.1: support for both UnboundID LDAP SDK and traditional JNDI LDAP integrations
+See [releases](//github.com/zapodot/embedded-ldap-junit/releases)
 
 ## Usage
 
