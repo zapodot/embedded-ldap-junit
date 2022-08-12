@@ -25,13 +25,8 @@ See [releases](//github.com/zapodot/embedded-ldap-junit/releases)
 <dependency>
     <groupId>org.zapodot</groupId>
     <artifactId>embedded-ldap-junit</artifactId>
-    <version>0.8.3</version>
+    <version>0.9.0</version>
 </dependency>
-```
-
-#### SBT
-```scala
-libraryDependencies += "org.zapodot" % "embedded-ldap-junit" % "0.8.3"
 ```
 
 ### Add to Junit test
