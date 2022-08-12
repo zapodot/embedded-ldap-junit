@@ -6,7 +6,7 @@
 
     <groupId>org.zapodot</groupId>
     <artifactId>embedded-ldap-junit</artifactId>
-    <version>0.9.0</version>
+    <version>0.9.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>Library that provides a JUnit rule for setting up an in-memory LDAP server by using the glorious Unboundid LDAP SDK</description>
     <url>https://github.com/zapodot/embedded-ldap-junit</url>
