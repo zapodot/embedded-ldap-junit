@@ -5,10 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.zapodot</groupId>
-    <artifactId>embedded-ldap-junit</artifactId>
+    <artifactId>embedded-ldap-parent</artifactId>
+    <packaging>pom</packaging>
     <version>0.9.1-SNAPSHOT</version>
+
+    <modules>
+        <module>embedded-ldap-core</module>
+        <module>embedded-ldap-junit</module>
+        <module>embedded-ldap-junit5</module>
+    </modules>
     <name>${project.artifactId}</name>
-    <description>Library that provides a JUnit rule for setting up an in-memory LDAP server by using the glorious Unboundid LDAP SDK</description>
+    <description>Library that provides a JUnit rule and extension for setting up an in-memory LDAP server by using the glorious Unboundid LDAP SDK</description>
     <url>https://github.com/zapodot/embedded-ldap-junit</url>
     <inceptionYear>2015</inceptionYear>
     <developers>
@@ -24,6 +31,7 @@
     </developers>
     <properties>
         <junit.version>4.13.2</junit.version>
+        <junit5.version>5.7.0</junit5.version>
         <unboundid-ldapsdk.version>6.0.6</unboundid-ldapsdk.version>
         <slf4j.version>1.7.36</slf4j.version>
         <guava.version>31.1-jre</guava.version>
@@ -40,51 +48,7 @@
         <java.version>8</java.version>
         <maven-jacoco-plugin.version>0.8.8</maven-jacoco-plugin.version>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>com.unboundid</groupId>
-            <artifactId>unboundid-ldapsdk</artifactId>
-            <version>${unboundid-ldapsdk.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>${byte-buddy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.bouncycastle</groupId>
-          <artifactId>bcprov-jdk15on</artifactId>
-          <version>${bouncycastle.version}</version>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.bouncycastle</groupId>
-          <artifactId>bcpkix-jdk15on</artifactId>
-          <version>${bouncycastle.version}</version>
-          <scope>test</scope>
-        </dependency>
-    </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -189,6 +153,10 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
         </plugins>
     </build>
     <licenses>
@@ -271,3 +239,4 @@
         </profile>
     </profiles>
 </project>
+
