@@ -31,9 +31,13 @@ public class EmbeddedLdapRuleBuilder extends AbstractEmbeddedLdapBuilder<Embedde
      */
     public EmbeddedLdapRule build() {
         Objects.requireNonNull(bindDSN, "\"bindDSN\" can not be null");
-        return EmbeddedLdapRuleImpl.createForConfiguration(createInMemoryServerConfiguration(),
-                                                           authenticationConfiguration,
-                                                           ldifsToImport);
+        return EmbeddedLdapRuleImpl.createForConfiguration(
+            createInMemoryServerConfiguration(),
+            authenticationConfiguration,
+            ldifsToImport,
+            useTls,
+            socketFactory
+        );
     }
 
 }

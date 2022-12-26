@@ -7,6 +7,9 @@ import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
 import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPException;
 import com.unboundid.ldap.sdk.LDAPInterface;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.implementation.FixedValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zapodot.junit.ldap.EmbeddedLdapServer;
@@ -18,8 +21,15 @@ import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.ldap.LdapContext;
+import javax.net.SocketFactory;
+import javax.net.ssl.SSLSocketFactory;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Modifier;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.net.URLDecoder;
+import java.net.UnknownHostException;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -34,11 +44,16 @@ abstract class EmbeddedLdapServerImpl implements EmbeddedLdapServer {
     private LDAPConnection ldapConnection;
     private InitialDirContext initialDirContext;
     private boolean isStarted = false;
+    private final boolean useTls;
+    private final SSLSocketFactory socketFactory;
 
     public EmbeddedLdapServerImpl(final InMemoryDirectoryServer inMemoryDirectoryServer,
-                                  final AuthenticationConfiguration authenticationConfiguration1) {
+                                  final AuthenticationConfiguration authenticationConfiguration1,
+                                  final boolean useTls, SSLSocketFactory socketFactory) {
         this.inMemoryDirectoryServer = inMemoryDirectoryServer;
         this.authenticationConfiguration = authenticationConfiguration1;
+        this.useTls = useTls;
+        this.socketFactory = socketFactory;
     }
 
     protected static InMemoryDirectoryServer createServer(final InMemoryDirectoryServerConfig inMemoryDirectoryServerConfig,
@@ -112,10 +127,63 @@ abstract class EmbeddedLdapServerImpl implements EmbeddedLdapServer {
         }
     }
 
+    public static abstract class AbstractDelegatingSocketFactory extends SocketFactory {
+        public static AbstractDelegatingSocketFactory INSTANCE;
+
+        public static AbstractDelegatingSocketFactory getDefault() {
+            return INSTANCE;
+        }
+
+        protected abstract SocketFactory getDelegate();
+
+        @Override
+        public Socket createSocket() throws IOException, UnknownHostException {
+            return getDelegate().createSocket();
+        }
+
+        @Override
+        public Socket createSocket(String host, int port) throws IOException, UnknownHostException {
+            return getDelegate().createSocket(host, port);
+        }
+
+        @Override
+        public Socket createSocket(String host, int port, InetAddress localHost, int localPort)
+            throws IOException, UnknownHostException {
+            return getDelegate().createSocket(host, port, localHost, localPort);
+        }
+
+        @Override
+        public Socket createSocket(InetAddress host, int port) throws IOException {
+            return getDelegate().createSocket(host, port);
+        }
+
+        @Override
+        public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort)
+            throws IOException {
+            return getDelegate().createSocket(address, port, localAddress, localPort);
+        }
+    }
+
     private Hashtable<String, String> createLdapEnvironment() {
         final Hashtable<String, String> environment = new Hashtable<>();
+        if (socketFactory != null) {
+            final Class<?> delegator = (new ByteBuddy()).subclass(AbstractDelegatingSocketFactory.class)
+                .defineMethod("getDelegate", SocketFactory.class, Modifier.PROTECTED)
+                .intercept(FixedValue.value(socketFactory))
+                .make()
+                .load(getClass().getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
+                .getLoaded();
+            try {
+                final Object instance = delegator.newInstance();
+                delegator.getField("INSTANCE").set(instance, instance);
+            } catch (InstantiationException | IllegalAccessException | NoSuchFieldException e) {
+                throw new IllegalStateException(e);
+            }
+            environment.put("java.naming.ldap.factory.socket", delegator.getCanonicalName());
+        }
         environment.put(LdapContext.CONTROL_FACTORIES, JAVA_RT_CONTROL_FACTORY);
-        environment.put(Context.PROVIDER_URL, String.format("ldap://%s:%s",
+        environment.put(Context.PROVIDER_URL, String.format("%s://%s:%s",
+                                                            useTls ? "ldaps" : "ldap",
                 inMemoryDirectoryServer.getListenAddress().getHostName(),
                 embeddedServerPort()));
         environment.put(Context.INITIAL_CONTEXT_FACTORY, JAVA_RT_CONTEXT_FACTORY);

@@ -6,16 +6,17 @@ import com.unboundid.ldap.sdk.LDAPException;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.zapodot.junit.ldap.junit5.EmbeddedLdapExtension;
 
+import javax.net.ssl.SSLSocketFactory;
 import java.util.List;
 
 public class EmbeddedLdapExtensionImpl extends EmbeddedLdapServerImpl implements EmbeddedLdapExtension {
 
     public static EmbeddedLdapExtension createForConfiguration(final InMemoryDirectoryServerConfig inMemoryDirectoryServerConfig,
                                                                final AuthenticationConfiguration authenticationConfiguration,
-                                                               final List<String> ldifs) {
+                                                               final List<String> ldifs, boolean useTls, SSLSocketFactory socketFactory) {
         try {
             return new EmbeddedLdapExtensionImpl(createServer(inMemoryDirectoryServerConfig, ldifs),
-                    authenticationConfiguration);
+                    authenticationConfiguration, useTls, socketFactory);
         } catch (LDAPException e) {
             throw new IllegalStateException("Can not initiate in-memory LDAP server due to an exception", e);
         }
@@ -23,8 +24,9 @@ public class EmbeddedLdapExtensionImpl extends EmbeddedLdapServerImpl implements
 
     private boolean isStartedBeforeAll = false;
 
-    public EmbeddedLdapExtensionImpl(InMemoryDirectoryServer inMemoryDirectoryServer, AuthenticationConfiguration authenticationConfiguration1) {
-        super(inMemoryDirectoryServer, authenticationConfiguration1);
+    public EmbeddedLdapExtensionImpl(InMemoryDirectoryServer inMemoryDirectoryServer, AuthenticationConfiguration authenticationConfiguration1,
+                                     boolean useTls, SSLSocketFactory socketFactory) {
+        super(inMemoryDirectoryServer, authenticationConfiguration1, useTls, socketFactory);
     }
 
     @Override

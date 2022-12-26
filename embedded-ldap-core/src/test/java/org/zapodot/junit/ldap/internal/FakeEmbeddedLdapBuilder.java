@@ -20,9 +20,7 @@ class FakeEmbeddedLdapBuilder extends AbstractEmbeddedLdapBuilder<FakeEmbeddedLd
   EmbeddedLdapServer build() {
     try {
       InMemoryDirectoryServer server = createServer(createInMemoryServerConfiguration(), ldifsToImport);
-      return new EmbeddedLdapServerImpl(
-          server,
-          authenticationConfiguration) {
+      return new EmbeddedLdapServerImpl(server, authenticationConfiguration, false, null) {
 
       };
     } catch (LDAPException e) {

@@ -26,9 +26,13 @@ public class EmbeddedLdapExtensionBuilder extends AbstractEmbeddedLdapBuilder<Em
      */
     public EmbeddedLdapExtension build() {
         Objects.requireNonNull(bindDSN, "\"bindDSN\" can not be null");
-        return EmbeddedLdapExtensionImpl.createForConfiguration(createInMemoryServerConfiguration(),
-                authenticationConfiguration,
-                ldifsToImport);
+        return EmbeddedLdapExtensionImpl.createForConfiguration(
+            createInMemoryServerConfiguration(),
+            authenticationConfiguration,
+            ldifsToImport,
+            useTls,
+            socketFactory
+        );
     }
 
     @Override

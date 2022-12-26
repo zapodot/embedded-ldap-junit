@@ -9,6 +9,7 @@ import com.unboundid.ldap.sdk.LDAPException;
 import com.unboundid.ldap.sdk.schema.Schema;
 import com.unboundid.ldif.LDIFException;
 
+import javax.net.ssl.SSLSocketFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -50,6 +51,12 @@ public abstract class AbstractEmbeddedLdapBuilder<Self extends AbstractEmbeddedL
     protected AuthenticationConfiguration authenticationConfiguration;
 
     private InMemoryListenerConfig listenerConfig = null;
+
+    protected boolean useTls = false;
+    protected SSLSocketFactory socketFactory = null;
+
+    private Integer maxSizeLimit = null;
+
 
     /**
      * Sets a domainDsn to be used. May be multiple values. If not set, it will default to the value of the {@link #DEFAULT_DOMAIN DEFAULT_DOMAIN} field
@@ -118,6 +125,11 @@ public abstract class AbstractEmbeddedLdapBuilder<Self extends AbstractEmbeddedL
         return getThis();
     }
 
+    public Self withMaxSizeLimit(final int maxSizeLimit) {
+        this.maxSizeLimit = Integer.valueOf(maxSizeLimit);
+        return getThis();
+    }
+
     /**
      * Avoid adding UnboundID's default schema that contains the most common LDAP elements defined through various RFC's.
      *
@@ -157,6 +169,11 @@ public abstract class AbstractEmbeddedLdapBuilder<Self extends AbstractEmbeddedL
         return getThis();
     }
 
+    public Self useTls(boolean useTls) {
+        this.useTls = useTls;
+        return getThis();
+    }
+
     protected abstract Self getThis();
 
     protected InMemoryDirectoryServerConfig createInMemoryServerConfiguration() {
@@ -178,6 +195,9 @@ public abstract class AbstractEmbeddedLdapBuilder<Self extends AbstractEmbeddedL
             }
             inMemoryDirectoryServerConfig.setListenerConfigs(listenerConfig);
             inMemoryDirectoryServerConfig.setSchema(customSchema());
+            if(maxSizeLimit != null) {
+                inMemoryDirectoryServerConfig.setMaxSizeLimit(maxSizeLimit);
+            }
             return inMemoryDirectoryServerConfig;
         } catch (LDAPException e) {
             throw new IllegalStateException(
@@ -236,5 +256,8 @@ public abstract class AbstractEmbeddedLdapBuilder<Self extends AbstractEmbeddedL
         }));
     }
 
-
+    public Self withSocketFactory(SSLSocketFactory socketFactory) {
+        this.socketFactory = socketFactory;
+        return getThis();
+    }
 }
