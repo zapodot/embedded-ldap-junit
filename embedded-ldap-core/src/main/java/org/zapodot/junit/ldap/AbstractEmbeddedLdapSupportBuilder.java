@@ -9,7 +9,6 @@ import com.unboundid.ldap.sdk.LDAPException;
 import com.unboundid.ldap.sdk.schema.Schema;
 import com.unboundid.ldif.LDIFException;
 import org.zapodot.junit.ldap.internal.AuthenticationConfiguration;
-import org.zapodot.junit.ldap.internal.EmbeddedLdapRuleImpl;
 
 import javax.net.ssl.SSLSocketFactory;
 import java.io.File;
@@ -22,53 +21,38 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * A builder providing a fluent way of defining EmbeddedLdapRule instances
- */
-public class EmbeddedLdapRuleBuilder {
-
+public abstract class AbstractEmbeddedLdapSupportBuilder<T> {
     public static final String DEFAULT_DOMAIN = "dc=example,dc=com";
     public static final String DEFAULT_BIND_DSN = "cn=Directory manager";
     public static final String DEFAULT_BIND_CREDENTIALS = "password";
     public static final String LDAP_SERVER_LISTENER_NAME = "test-listener";
     public static final int MIN_PORT_EXCLUSIVE = 0;
     public static final int MAX_PORT_EXCLUSIVE = 65535;
-    private List<String> domainDsn = new LinkedList<>();
+    protected List<String> domainDsn = new LinkedList<>();
 
-    private String bindDSN = DEFAULT_BIND_DSN;
+    protected String bindDSN = DEFAULT_BIND_DSN;
 
-    private String bindCredentials = DEFAULT_BIND_CREDENTIALS;
+    protected String bindCredentials = DEFAULT_BIND_CREDENTIALS;
 
-    private List<String> ldifsToImport = new LinkedList<>();
+    protected List<String> ldifsToImport = new LinkedList<>();
 
-    private List<String> schemaLdifs = new LinkedList<>();
+    protected List<String> schemaLdifs = new LinkedList<>();
 
-    private boolean addDefaultSchema = true;
+    protected boolean addDefaultSchema = true;
 
-    private Integer bindPort = 0;
+    protected Integer bindPort = 0;
 
-    private InetAddress bindAddress = InetAddress.getLoopbackAddress();
+    protected InetAddress bindAddress = InetAddress.getLoopbackAddress();
 
-    private AuthenticationConfiguration authenticationConfiguration;
+    protected AuthenticationConfiguration authenticationConfiguration;
 
-    private InMemoryListenerConfig listenerConfig = null;
+    protected InMemoryListenerConfig listenerConfig = null;
 
-    private boolean useTls = false;
-    private SSLSocketFactory socketFactory = null;
+    protected boolean useTls = false;
+    protected SSLSocketFactory socketFactory = null;
 
-    private Integer maxSizeLimit = null;
+    protected Integer maxSizeLimit = null;
 
-    public EmbeddedLdapRuleBuilder() {
-    }
-
-    /**
-     * Creates a new builder
-     *
-     * @return a new EmbeddedLdapRuleBuilder instance
-     */
-    public static EmbeddedLdapRuleBuilder newInstance() {
-        return new EmbeddedLdapRuleBuilder();
-    }
 
     /**
      * Sets a domainDsn to be used. May be multiple values. If not set, it will default to the value of the {@link #DEFAULT_DOMAIN DEFAULT_DOMAIN} field
@@ -76,7 +60,7 @@ public class EmbeddedLdapRuleBuilder {
      * @param domainDsn a valid DSN string
      * @return same EmbeddedLdapRuleBuilder instance with the domainDsn field set
      */
-    public EmbeddedLdapRuleBuilder usingDomainDsn(final String domainDsn) {
+    public AbstractEmbeddedLdapSupportBuilder<T> usingDomainDsn(final String domainDsn) {
         this.domainDsn.add(domainDsn);
         return this;
     }
@@ -87,7 +71,7 @@ public class EmbeddedLdapRuleBuilder {
      * @param bindDSN a valid DSN string
      * @return same EmbeddedLdapRuleBuilder instance with the bindDSN field set
      */
-    public EmbeddedLdapRuleBuilder usingBindDSN(final String bindDSN) {
+    public AbstractEmbeddedLdapSupportBuilder<T> usingBindDSN(final String bindDSN) {
         this.bindDSN = bindDSN;
         return this;
     }
@@ -98,7 +82,7 @@ public class EmbeddedLdapRuleBuilder {
      * @param bindCredentials a password string
      * @return same EmbeddedLdapRuleBuilder instance with the bindCredentials field set
      */
-    public EmbeddedLdapRuleBuilder usingBindCredentials(final String bindCredentials) {
+    public AbstractEmbeddedLdapSupportBuilder<T> usingBindCredentials(final String bindCredentials) {
         this.bindCredentials = bindCredentials;
         return this;
     }
@@ -111,7 +95,7 @@ public class EmbeddedLdapRuleBuilder {
      * @throws IllegalArgumentException if the provided value for port is not between @{link MIN_PORT_EXCLUSIVE}
      *                                  and @{MAX_PORT_EXCLUSIVE} (exclusive)
      */
-    public EmbeddedLdapRuleBuilder bindingToPort(final int port) {
+    public AbstractEmbeddedLdapSupportBuilder<T> bindingToPort(final int port) {
         if ((port < MIN_PORT_EXCLUSIVE) || (port > MAX_PORT_EXCLUSIVE)) {
             throw new IllegalArgumentException(String.format("Value \"%s\" is not a valid port number", port));
         }
@@ -126,7 +110,7 @@ public class EmbeddedLdapRuleBuilder {
      * @return same EmbeddedLdapRuleBuilder instance with the bindAddress field set
      * @throws IllegalArgumentException if the value provided for \"address\" is invalid
      */
-    public EmbeddedLdapRuleBuilder bindingToAddress(final String address) {
+    public AbstractEmbeddedLdapSupportBuilder<T> bindingToAddress(final String address) {
         Objects.requireNonNull(address);
         try {
             final InetAddress addressByName = InetAddress.getByName(address);
@@ -137,7 +121,7 @@ public class EmbeddedLdapRuleBuilder {
         return this;
     }
 
-    public EmbeddedLdapRuleBuilder withMaxSizeLimit(final int maxSizeLimit) {
+    public AbstractEmbeddedLdapSupportBuilder<T> withMaxSizeLimit(final int maxSizeLimit) {
         this.maxSizeLimit = Integer.valueOf(maxSizeLimit);
         return this;
     }
@@ -147,7 +131,7 @@ public class EmbeddedLdapRuleBuilder {
      *
      * @return same EmbeddedLdapRuleBuilder instance with the withoutDefaultSchema field set to FALSE
      */
-    public EmbeddedLdapRuleBuilder withoutDefaultSchema() {
+    public AbstractEmbeddedLdapSupportBuilder<T> withoutDefaultSchema() {
         this.addDefaultSchema = false;
         return this;
     }
@@ -158,7 +142,7 @@ public class EmbeddedLdapRuleBuilder {
      * @param ldifSchemaFiles LDIF-files containing schema element definitions
      * @return same EmbeddedLdapRuleBuilder with the given LDIF-files added to the internal schema file collection.
      */
-    public EmbeddedLdapRuleBuilder withSchema(final String... ldifSchemaFiles) {
+    public AbstractEmbeddedLdapSupportBuilder<T> withSchema(final String... ldifSchemaFiles) {
         this.schemaLdifs.addAll(Arrays.asList(ldifSchemaFiles));
         return this;
     }
@@ -169,19 +153,19 @@ public class EmbeddedLdapRuleBuilder {
      * @param ldifFiles LDIF-files to import
      * @return same EmbeddedLdapRuleBuilder instance with the provided ldifFiles added to the list of LDIF files to import
      */
-    public EmbeddedLdapRuleBuilder importingLdifs(final String... ldifFiles) {
+    public AbstractEmbeddedLdapSupportBuilder<T> importingLdifs(final String... ldifFiles) {
         if (ldifFiles != null) {
             ldifsToImport.addAll(Arrays.asList(ldifFiles));
         }
         return this;
     }
 
-    public EmbeddedLdapRuleBuilder withListener(InMemoryListenerConfig listenerConfig) {
+    public AbstractEmbeddedLdapSupportBuilder<T> withListener(InMemoryListenerConfig listenerConfig) {
         this.listenerConfig = listenerConfig;
         return this;
     }
 
-    public EmbeddedLdapRuleBuilder useTls(boolean useTls) {
+    public AbstractEmbeddedLdapSupportBuilder<T> useTls(boolean useTls) {
         this.useTls = useTls;
         return this;
     }
@@ -191,14 +175,10 @@ public class EmbeddedLdapRuleBuilder {
      *
      * @return a new EmbeddedLdapRule instance
      */
-    public EmbeddedLdapRule build() {
-        Objects.requireNonNull(bindDSN, "\"bindDSN\" can not be null");
-        return EmbeddedLdapRuleImpl.createForConfiguration(createInMemoryServerConfiguration(),
-                                                           authenticationConfiguration,
-                                                           ldifsToImport, useTls, socketFactory);
-    }
+    abstract public T build();
 
-    private InMemoryDirectoryServerConfig createInMemoryServerConfiguration() {
+
+    protected InMemoryDirectoryServerConfig createInMemoryServerConfiguration() {
         try {
             final InMemoryDirectoryServerConfig inMemoryDirectoryServerConfig =
                     new InMemoryDirectoryServerConfig(domainDsnArray());
@@ -210,10 +190,10 @@ public class EmbeddedLdapRuleBuilder {
 
             if (listenerConfig == null) {
                 listenerConfig = InMemoryListenerConfig.createLDAPConfig(
-                    LDAP_SERVER_LISTENER_NAME,
-                    bindAddress,
-                    bindPort,
-                    null);
+                        LDAP_SERVER_LISTENER_NAME,
+                        bindAddress,
+                        bindPort,
+                        null);
             }
             inMemoryDirectoryServerConfig.setListenerConfigs(listenerConfig);
             inMemoryDirectoryServerConfig.setSchema(customSchema());
@@ -243,8 +223,8 @@ public class EmbeddedLdapRuleBuilder {
             final Schema initialSchema = (addDefaultSchema ? Schema.getDefaultStandardSchema() : null);
             if (!schemaFiles.isEmpty()) {
                 final Schema customSchema = initialSchema == null
-                                            ? Schema.getSchema(schemaFiles)
-                                            : Schema.mergeSchemas(initialSchema, Schema.getSchema(schemaFiles));
+                        ? Schema.getSchema(schemaFiles)
+                        : Schema.mergeSchemas(initialSchema, Schema.getSchema(schemaFiles));
                 return customSchema;
             } else {
                 return null;
@@ -278,8 +258,9 @@ public class EmbeddedLdapRuleBuilder {
         }));
     }
 
-    public EmbeddedLdapRuleBuilder withSocketFactory(SSLSocketFactory socketFactory) {
+    public AbstractEmbeddedLdapSupportBuilder<T> withSocketFactory(SSLSocketFactory socketFactory) {
         this.socketFactory = socketFactory;
         return this;
     }
+
 }
