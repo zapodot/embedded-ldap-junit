@@ -98,10 +98,10 @@ public class ContextProxyFactory {
 
     public static DirContext asDelegatingDirContext(final InitialDirContext initialDirContext) {
         try {
-            final DirContext dirContext = DIR_CONTEXT_PROXY_TYPE.newInstance();
+            final DirContext dirContext = DIR_CONTEXT_PROXY_TYPE.getDeclaredConstructor().newInstance();
             ((DirContextProxy) dirContext).setDelegatedDirContext(initialDirContext);
             return dirContext;
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new IllegalStateException("Could not wrap DirContext", e);
         }
     }

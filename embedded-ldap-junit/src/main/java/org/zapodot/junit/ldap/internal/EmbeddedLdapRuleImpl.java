@@ -7,6 +7,9 @@ import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
 import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPException;
 import com.unboundid.ldap.sdk.LDAPInterface;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.implementation.FixedValue;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
@@ -20,24 +23,17 @@ import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.ldap.LdapContext;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Modifier;
-
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Modifier;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
 import java.util.Hashtable;
 import java.util.List;
-
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
-import net.bytebuddy.implementation.FixedValue;
 
 public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
 

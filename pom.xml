@@ -5,12 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.zapodot</groupId>
-    <artifactId>embedded-ldap-junit</artifactId>
+    <artifactId>embedded-ldap-junit-parent</artifactId>
+    <packaging>pom</packaging>
     <version>0.9.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>Library that provides a JUnit rule for setting up an in-memory LDAP server by using the glorious Unboundid LDAP SDK</description>
     <url>https://github.com/zapodot/embedded-ldap-junit</url>
     <inceptionYear>2015</inceptionYear>
+
+    <modules>
+        <module>embedded-ldap-core</module>
+        <module>embedded-ldap-junit</module>
+        <module>embedded-ldap-junit-jupiter</module>
+    </modules>
     <developers>
         <developer>
             <id>zapodot</id>
@@ -24,12 +31,13 @@
     </developers>
     <properties>
         <junit.version>4.13.2</junit.version>
+        <junit-jupiter.version>5.9.1</junit-jupiter.version>
         <unboundid-ldapsdk.version>6.0.6</unboundid-ldapsdk.version>
         <slf4j.version>1.7.36</slf4j.version>
         <guava.version>31.1-jre</guava.version>
-        <byte-buddy.version>1.12.17</byte-buddy.version>
+        <byte-buddy.version>1.14.4</byte-buddy.version>
         <logback.version>1.2.11</logback.version>
-        <bouncycastle.version>1.70</bouncycastle.version>
+        <bouncycastle.version>1.72</bouncycastle.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.4.1</maven-javadoc-plugin.version>
@@ -37,54 +45,43 @@
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
         <maven-nexus-staging-plugin.version>1.6.13</maven-nexus-staging-plugin.version>
         <maven-enforcer-plugin.version>3.1.0</maven-enforcer-plugin.version>
-        <java.version>8</java.version>
-        <maven-jacoco-plugin.version>0.8.8</maven-jacoco-plugin.version>
+        <java.version>11</java.version>
+        <maven-jacoco-plugin.version>0.8.9</maven-jacoco-plugin.version>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>com.unboundid</groupId>
-            <artifactId>unboundid-ldapsdk</artifactId>
-            <version>${unboundid-ldapsdk.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>${byte-buddy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.bouncycastle</groupId>
-          <artifactId>bcprov-jdk15on</artifactId>
-          <version>${bouncycastle.version}</version>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.bouncycastle</groupId>
-          <artifactId>bcpkix-jdk15on</artifactId>
-          <version>${bouncycastle.version}</version>
-          <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.zapodot</groupId>
+                <artifactId>embedded-ldap-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.zapodot</groupId>
+                <artifactId>embedded-ldap-junit</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.unboundid</groupId>
+                <artifactId>unboundid-ldapsdk</artifactId>
+                <version>${unboundid-ldapsdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${byte-buddy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <build>
         <plugins>
             <plugin>
