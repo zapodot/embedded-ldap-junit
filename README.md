@@ -1,7 +1,7 @@
 # embedded-ldap-junit
 [![Build Status](https://github.com/zapodot/embedded-ldap-junit/actions/workflows/maven.yml/badge.svg)](https://github.com/zapodot/embedded-ldap-junit/actions/workflows/maven.yml) [![codecov](https://codecov.io/gh/zapodot/embedded-ldap-junit/branch/master/graph/badge.svg?token=2jm8uT1bJg)](https://codecov.io/gh/zapodot/embedded-ldap-junit) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.zapodot/embedded-ldap-junit/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.zapodot/embedded-ldap-junit) [![Libraries.io for GitHub](https://img.shields.io/librariesio/github/zapodot/embedded-ldap-junit.svg)](https://libraries.io/github/zapodot/embedded-ldap-junit) [![GitHub](https://img.shields.io/github/license/zapodot/embedded-ldap-junit)](https://github.com/zapodot/embedded-ldap-junit/blob/master/LICENSE) [![Analytics](https://ga-beacon.appspot.com/UA-40926073-2/embedded-ldap-junit/README.md)](https://github.com/igrigorik/ga-beacon)
 
-A [JUnit Rule](//github.com/junit-team/junit/wiki/Rules) for running an embedded LDAP server in your JUnit test based on the wonderful [UnboundID LDAP SDK](https://www.ldap.com/unboundid-ldap-sdk-for-java). Inspired by the [Embedded Database JUnit Rule](//github.com/zapodot/embedded-db-junit).
+A [JUnit 4 Rule](//github.com/junit-team/junit/wiki/Rules) and [JUnit 5 Extension](https://junit.org/junit5/docs/current/user-guide/#extensions) for running an embedded LDAP server in your JUnit test based on the wonderful [UnboundID LDAP SDK](https://www.ldap.com/unboundid-ldap-sdk-for-java). Inspired by the [Embedded Database JUnit Rule](//github.com/zapodot/embedded-db-junit).
 
 ## Why?
 * you want to test your LDAP integration code without affecting your LDAP server
@@ -29,7 +29,9 @@ See [releases](//github.com/zapodot/embedded-ldap-junit/releases)
 </dependency>
 ```
 
-### Add to Junit test
+### Add to JUnit test
+
+#### JUnit 4
 ```java
 import com.unboundid.ldap.sdk.LDAPInterface;
 import javax.naming.Context;
@@ -79,3 +81,19 @@ public void testContext() throws Exception {
     assertNotNull(user);
 }
 ```
+
+#### JUnit 5
+For JUnit 5 tests, simply use `EmbeddedLdapExtensionBuilder` instead of `EmbeddedLdapRuleBuilder`:
+
+```java
+@RegisterExtension
+public EmbeddedLdapExtension embeddedLdapRule = EmbeddedLdapExtensionBuilder
+        .newInstance()
+        .usingDomainDsn("dc=example,dc=com")
+        .importingLdifs("example.ldif")
+        .build();
+
+...
+```
+
+Both JUnit 4 and JUnit 5 builders share the same API, as do the rule and the extension.
