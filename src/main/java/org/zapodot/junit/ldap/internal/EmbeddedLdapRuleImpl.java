@@ -39,7 +39,7 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.FixedValue;
 
-public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
+public class EmbeddedLdapRuleImpl extends EmbeddedLdapRule {
 
     private static final String JAVA_RT_CONTROL_FACTORY = "com.sun.jndi.ldap.DefaultResponseControlFactory";
 
@@ -213,22 +213,13 @@ public class EmbeddedLdapRuleImpl implements EmbeddedLdapRule {
     }
 
     @Override
-    public Statement apply(final Statement base, final Description description) {
-        return statement(base);
+    protected void before() throws Throwable {
+        startEmbeddedLdapServer();
     }
 
-    private Statement statement(final Statement base) {
-        return new Statement() {
-            @Override
-            public void evaluate() throws Throwable {
-                startEmbeddedLdapServer();
-                try {
-                    base.evaluate();
-                } finally {
-                    takeDownEmbeddedLdapServer();
-                }
-            }
-        };
+    @Override
+    protected void after() {
+        takeDownEmbeddedLdapServer();
     }
 
     private void startEmbeddedLdapServer() throws LDAPException {
